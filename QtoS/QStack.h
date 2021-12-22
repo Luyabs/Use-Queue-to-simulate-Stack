@@ -195,6 +195,8 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in)
 			case 2:
 				if (IsFull(1) == 0)		//有一条队列已满 调用单队列作栈法
 					Push_Solo(e[i]);
+				else
+					return OVERFLOW;	//栈满溢出
 				break;
 			default:
 				break;
