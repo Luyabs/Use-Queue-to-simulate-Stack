@@ -72,6 +72,17 @@ Status QStack<ElemType>::Clear()
 }
 
 template<class ElemType>
+void QStack<ElemType>::Traverse(void (*Visit)(const ElemType&)) const
+{
+	int temp = cur;
+	for (int i = q[cur].front; i != q[cur].rear; i = (i + 1) % q[cur].maxSize)
+		(*Visit)(q[cur].elems[i]);
+	temp = 1 - cur;
+	for (int i = q[cur].front; i != q[cur].rear; i = (i + 1) % q[cur].maxSize)
+		(*Visit)(q[cur].elems[i]);
+}
+
+template<class ElemType>
 Status QStack<ElemType>::Push(const ElemType e)
 {
 	int L = q[cur].GetLength();
