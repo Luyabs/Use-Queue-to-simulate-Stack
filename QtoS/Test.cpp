@@ -2,7 +2,42 @@
 #include "QStack.h"
 
 int main(void)
+{#include <iostream>
+#include "QStack.h"
+
+
+int main()
 {
+	double e = 0;
+	QStack<double> s;
+	//cout << s.IsEmpty(1) << endl;
+	//cout << s.IsEmpty(2) << endl;
+	//cout << s.IsEmpty(3) << endl;
+	cout << "IsEmpty3?  " << s.IsEmpty(3) << endl;
+	s.Push(0.5);
+	s.Clear();
+	s.Push(1.2);
+	s.Push(3.4);
+
+	QStack<double> s_copy(s);
+	QStack<double> s_equal;
+	s_equal = s_copy;
+	cout << "Copy_construction_Traverse:  ";
+	s_copy.Traverse((Write<double>));
+	cout << endl << "Assignment_Traverse:  ";
+	s_equal.Traverse((Write<double>));
+	cout << endl;
+
+	cout << "GetLength:  " << s.GetLength() << endl;
+	s.Top(e);	cout << "Top:  " << e << endl << "Traverse:  ";
+	s.Traverse((Write<double>));	cout << endl;
+	cout << "IsEmpty3?  " << s.IsEmpty(3) << endl;
+	s.Pop(e);	cout << "Pop:  " << e << endl;
+	s.Pop(e);	cout << "Pop:  " << e << endl << "Traverse:  ";
+	s.Traverse((Write<double>));	cout << endl;
+	cout << "IsEmpty3?  " << s.IsEmpty(3) << endl;
+}
+	/*
 	char c = '#';
     QStack<int> sa;
     int x;
@@ -50,7 +85,7 @@ int main(void)
 	}
 
 	system("PAUSE");  
-	return 0;  
+	return 0;  */
 }
 
 
