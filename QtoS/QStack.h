@@ -8,12 +8,12 @@ public:
 	QStack();
 	virtual ~QStack();
 	int GetLength() const;							// 求栈的长度			 
-	bool IsEmpty() const;							// 判断栈是否为空
+	bool IsEmpty(int mode=1) const;					// 判断栈中队列是否为空 //mode = 1 两条队列是否全空(栈为空)?	mode = 2 至少有一条队列为空?	mode = 3 有且仅有一条空队列? 
 	void Clear();									// 将栈清空
 	void Traverse(void (*Visit)(const ElemType&)) const;	// 遍历栈
 	Status Push(const ElemType e);				    // 入栈
 	Status Top(ElemType& e) const;				    // 取顶元素
-	Status Pop(ElemType& e);					    // 出栈
+	Status Pop(ElemType& e);					    // 出栈 用e接收弹出的元素
 	QStack(const QStack<ElemType>& s);		// 复制构造函数
 	QStack<ElemType>& operator =(const QStack<ElemType>& s); // 赋值语句重载
 
@@ -24,10 +24,8 @@ private:
 };
 
 template<class ElemType>
-QStack<ElemType>::QStack():cur(0)
+QStack<ElemType>::QStack()
 {
-	q[0] = SeqQueue<ElemType>();
-	q[1] = SeqQueue<ElemType>();
 }
 
 
@@ -37,67 +35,72 @@ QStack<ElemType>::~QStack()
 }
 
 template<class ElemType>
-bool QStack<ElemType>::IsEmpty() const		//case = 0 两条队列是否全空?;	case = 1 至少有一条队列为空?；	case = 2 有且仅有一条空队列? 
+bool QStack<ElemType>::IsEmpty(int mode) const		//mode = 1 两条队列是否全空(栈为空)?	mode = 2 至少有一条队列为空?	mode = 3 有且仅有一条空队列? 
 {
 	bool emp1 = q[0].IsEmpty();
 	bool emp2 = q[1].IsEmpty();
-	cout<<emp1<<endl;
-	cout<<emp2<<endl;
-	if (emp1 == 0 && emp2 == 0)	
-		return 0;
-	else if (emp1 == 0 || emp2 == 0)	
-		return 1;
-	else 
-		return 2;
-}
-
-template<class ElemType>
-Status QStack<ElemType>::Pop(ElemType& e)		//弹出"栈"顶元素
-{
-	if (IsEmpty()==0)	 
-		return UNDER_FLOW;
-	else 
-	{ 
-		q[cur].DelQueue(e); 
-		return SUCCESS;
-	}
-}
-
-template<class ElemType>
-Status QStack<ElemType>::Top(ElemType& e) const
-{
-	if (IsEmpty()==0)	 
-		return UNDER_FLOW;
-	else 
-	{ 
-		q[cur].GetHead(e); 
-		return SUCCESS;
-	}
-}
-
-template<class ElemType>
-Status QStack<ElemType>::Push(const ElemType e)
-{
-	q[1-cur].EnQueue(e);
-	ElemType rest;
-	while(q[cur].IsEmpty()==0)
+	switch (mode)
 	{
-		q[cur].DelQueue(rest); 
-		q[1-cur].EnQueue(rest);
+	case 1:
+		return (emp1 && emp2) == 1;
+	case 2:
+		return (emp1 || emp2) == 1;
+	case 3:
+		return (emp1 ^ emp2) == 1;
+	default:
+		break;
 	}
-	cur = (cur+1)%2;
-	return SUCCESS;
-}
-
-template<class ElemType>
-void QStack<ElemType>::Traverse(void (*Visit)(const ElemType&)) const
-{
-	q[cur].Traverse(Write<ElemType>);
 }
 
 template<class ElemType>
 void QStack<ElemType>::Clear()
 {
-	q[0].Clear();
-	q[1].Clear();
+	for (int i = 0; i < 2; i++)
+	{
+		while (q[i].IsEmpty == 0)
+		{
+			q[i].Clear();
+		}
+	}
+	if (IsEmpty() == 1)
+		return SUCCESS;
+	else
+		return FAIL;
 }
+
+template<class ElemType>
+Status QStack<ElemType>::Push(const ElemType e)
+{
+	int L = q[cur].GetLength();
+	if (L <= q[cur].maxSize)
+	{
+		q[1 - cur].EnQueue(e);
+		ElemType t;
+		for (int i = 0; i < L; i++)
+		{
+			q[cur].DelQueue(t);
+			q[1 - cur].EnQueue(t);
+		}
+		cur = 1 - cur;
+		return SUCCESS;
+	}
+	else
+	{
+		return Status();
+	}
+}
+
+template<class ElemType>
+Status QStack<ElemType>::Pop(ElemType& e)		//弹出"栈"顶元素
+{
+	if (IsEmpty(1))
+		return UNDER_FLOW;
+	else
+	{
+		e = q[cur].DelQueue(e);
+		return SUCCESS;
+	}
+}
+
+
+
