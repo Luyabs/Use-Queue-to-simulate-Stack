@@ -57,5 +57,25 @@ Status QStack<ElemType>::Pop(ElemType& e)		//弹出"栈"顶元素
 	}
 }
 
-
+template<class ElemType>
+Status QStack<ElemType>::Push(const ElemType e)
+{
+	int L = q[Cur].GetLength();
+	if (L <= q[Cur].maxSize)
+	{
+		q[1-Cur].EnQueue(e);
+		ElemType t;
+		for (int i = 0; i < L; i++)
+		{
+			q[Cur].DelQueue(t);
+			q[1-Cur].EnQueue(t)
+		}
+		Cur = 1 - Cur;
+		return SUCCESS;
+	}
+	else
+	{
+		return Status();
+	}
+}
 
