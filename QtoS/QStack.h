@@ -15,7 +15,7 @@ public:
 	Status Clear();									// 将栈清空
 	void Traverse(void (*Visit)(const ElemType&)) const;	// 遍历栈
 	Status Push_Switch(const ElemType e);				    // 入栈_左手倒右手 时间复杂度O(n^2)
-	void Push_Merge();										// 入栈_归并倒置 时间复杂度O(nlogn)
+	void Push_Merge(int stacklength = 0);				// stacklength是原来栈中有序元素的数量	入栈_归并倒置 时间复杂度O(nlogn)
 	Status Push_Solo(const ElemType e);						// 入栈_单队列操作 时间复杂度O(n^2)
 	void Push(ElemType stop, int size = 100, istream& in = cin);	 // 整合版入栈Push 参数分别为:终止符/数据大小/输入流
 	Status Top(ElemType& e) const;				    // 取顶元素
@@ -71,15 +71,18 @@ bool QStack<ElemType>::IsEmpty(int mode) const		//mode = 1 两条队列是否全
 
 template<class ElemType>
 bool QStack<ElemType>::IsFull(int mode) const	//mode = 1 两条队列是否全满队?	mode = 2 有且仅有一条队列满队? 
+// mode=3	两队队列都不满
 {
 	bool emp1 = q[0].IsFull();
 	bool emp2 = q[1].IsFull();
 	switch (mode)
 	{
 	case 1:
-		return(emp1 && emp2) == 1;
+		return emp1 && emp2;
 	case 2:
-		return(emp1 ^ emp2) == 1;
+		return emp1 ^ emp2;
+	case 3:
+		return !emp1 && !emp2;
 	default:
 		break;
 	}
@@ -138,18 +141,21 @@ template<class ElemType>
 void QStack<ElemType>::Push(ElemType stop, int size, istream& in)
 {
 	ElemType buffer;
-	ElemType *e = new ElemType[size];
+	ElemType* e = new ElemType[size];
 	int length;
 	int edge = 2048;		//！！！此处需要通过分析数据找到合适的数字，暂定2048  if else 的判定条件也应该更复杂 需要考虑"栈"中原来有多少元素(需添加函数中的临时变量)
 	int process = 1;
+	int stack_length = GetLength();
 
-	for (length = 0; length < maxsize; length++)
+	for (length = 0; length < maxsize-stack_length ; length++)
 	{
-		in >> buffer;	//当输入-999时退出录入数据
-		if (buffer = stop)
+		in >> buffer;	
+		if (buffer == stop)
 			break;
 		e[length] = buffer;
 	}
+	length += stack_length;//.mark
+	
 	if (length < edge)
 	{
 		for (int i = 0; i < length; i++)
@@ -157,7 +163,7 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in)
 			switch (process)
 			{
 			case 1:
-				if (IsFull(2) == 0)		//至少有一条队列为空 
+				if (IsFull(3))		//当前两条队列不满
 					Push_Switch(e[i]);
 				else
 				{
@@ -183,12 +189,12 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in)
 			switch (case)
 			{
 			case 1:
-				if (IsFull(2) == 0)		//至少有一条队列为空
+				if (IsFull(3))		//当前两条队列不满
 					q[cur].EnQueue(e[i]);	//将数据全插进去
 				else
 				{
 					process = 2;
-					Push_Merge();		//调用归并法倒置队列
+					Push_Merge(stack_length);		//调用归并法倒置队列
 					cur = 1 - cur;
 				}
 				break;
@@ -256,5 +262,3 @@ QStack<ElemType>& QStack<ElemType>::operator =(const QStack<ElemType>& s)
 	}
 	return *this;
 }
-
-
