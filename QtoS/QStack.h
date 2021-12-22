@@ -24,8 +24,10 @@ private:
 };
 
 template<class ElemType>
-QStack<ElemType>::QStack()
+QStack<ElemType>::QStack():cur(0)
 {
+	q[0] = SeqQueue<ElemType>();
+	q[1] = SeqQueue<ElemType>();
 }
 
 
@@ -39,20 +41,36 @@ bool QStack<ElemType>::IsEmpty() const		//case = 0 两条队列是否全空?;	ca
 {
 	bool emp1 = q[0].IsEmpty();
 	bool emp2 = q[1].IsEmpty();
-
-	if (emp1 & emp2 == 0)	return 0;
-	else if (emp1 | emp2 == 0)	return 1;
-	else if (emp1 ^ emp2 == 0)	return 2;
+	cout<<emp1<<endl;
+	cout<<emp2<<endl;
+	if (emp1 == 0 && emp2 == 0)	
+		return 0;
+	else if (emp1 == 0 || emp2 == 0)	
+		return 1;
+	else 
+		return 2;
 }
 
 template<class ElemType>
 Status QStack<ElemType>::Pop(ElemType& e)		//弹出"栈"顶元素
 {
-	if (IsEmpty())	 
+	if (IsEmpty()==0)	 
 		return UNDER_FLOW;
 	else 
 	{ 
-		e = q[cur].DelQueue(); 
+		q[cur].DelQueue(e); 
+		return SUCCESS;
+	}
+}
+
+template<class ElemType>
+Status QStack<ElemType>::Top(ElemType& e) const
+{
+	if (IsEmpty()==0)	 
+		return UNDER_FLOW;
+	else 
+	{ 
+		q[cur].GetHead(e); 
 		return SUCCESS;
 	}
 }
@@ -60,22 +78,26 @@ Status QStack<ElemType>::Pop(ElemType& e)		//弹出"栈"顶元素
 template<class ElemType>
 Status QStack<ElemType>::Push(const ElemType e)
 {
-	int L = q[Cur].GetLength();
-	if (L <= q[Cur].maxSize)
+	q[1-cur].EnQueue(e);
+	ElemType rest;
+	while(q[cur].IsEmpty()==0)
 	{
-		q[1-Cur].EnQueue(e);
-		ElemType t;
-		for (int i = 0; i < L; i++)
-		{
-			q[Cur].DelQueue(t);
-			q[1-Cur].EnQueue(t)
-		}
-		Cur = 1 - Cur;
-		return SUCCESS;
+		q[cur].DelQueue(rest); 
+		q[1-cur].EnQueue(rest);
 	}
-	else
-	{
-		return Status();
-	}
+	cur = (cur+1)%2;
+	return SUCCESS;
 }
 
+template<class ElemType>
+void QStack<ElemType>::Traverse(void (*Visit)(const ElemType&)) const
+{
+	q[cur].Traverse(Write<ElemType>);
+}
+
+template<class ElemType>
+void QStack<ElemType>::Clear()
+{
+	q[0].Clear();
+	q[1].Clear();
+}
