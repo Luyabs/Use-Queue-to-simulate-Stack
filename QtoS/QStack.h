@@ -9,7 +9,7 @@ public:
 	virtual ~QStack();
 	int GetLength() const;							// 求栈的长度			 
 	bool IsEmpty(int mode = 1) const;				// 判断栈中队列是否为空 //mode = 1 两条队列是否全空(栈为空)?	mode = 2 至少有一条队列为空?	mode = 3 有且仅有一条空队列? 
-	bool IsFull(int mode = 1) const;				// 判断栈中队列是否已满 
+	bool IsFull(int mode = 1) const;				// 判断栈中队列是否已满 //mode = 1 两条队列是否全满队?	mode = 2 有且仅有一条队列满队? 
 	Status Clear();									// 将栈清空
 	void Traverse(void (*Visit)(const ElemType&)) const;	// 遍历栈
 	Status Push(const ElemType e);				    // 入栈
@@ -59,6 +59,22 @@ bool QStack<ElemType>::IsEmpty(int mode) const		//mode = 1 两条队列是否全
 		return (emp1 || emp2) == 1;
 	case 3:
 		return (emp1 ^ emp2) == 1;
+	default:
+		break;
+	}
+}
+
+template<class ElemType>
+bool QStack<ElemType>::IsFull(int mode) const	//mode = 1 两条队列是否全满队?	mode = 2 有且仅有一条队列满队? 
+{
+	bool emp1 = q[0].IsFull();
+	bool emp2 = q[1].IsFull();
+	switch (mode)
+	{
+	case 1:
+		return(emp1 && emp2) == 1;
+	case 2:
+		return(emp1 ^ emp2) == 1;
 	default:
 		break;
 	}
