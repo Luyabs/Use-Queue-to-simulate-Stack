@@ -1,19 +1,56 @@
-﻿#include <iostream>
+#include <iostream>
 #include "QStack.h"
 
-
-int main()
+int main(void)
 {
-    std::cout << "Hello World!\n";
+	char c = '#';
+    QStack<int> sa;
+    int x;
+    while (c != '0')	{
+        cout << endl << "1. 生成栈.";
+        cout << endl << "2. 显示栈.";
+        cout << endl << "3. 入栈.";
+        cout << endl << "4. 出栈.";
+        cout << endl << "5. 取栈顶.";
+		cout << endl << "0. 退出";
+		cout << endl << "选择功能(0~5):";
+		cin >> c;
+		switch (c) 		{
+			case '1':
+			    sa.Clear();
+				cout << "输入e(e =0时退出)" << endl;
+    		    cin >> x;
+  				while (x != 0){
+					sa.Push(x);
+					cin >> x;
+                }
+				break;
+	       case '2':
+				cout << endl;
+			    sa.Traverse(Write<int>);
+				break;
+		   case '3':
+			    cout << endl << "输入元素值:";
+			    cin >> x;
+			    sa.Push(x);
+			    break;
+           case '4':
+			    if (sa.Pop(x) == SUCCESS)
+			           cout << endl << "栈顶元素值为：" << x << "." << endl;
+                else
+			           cout << endl << "栈为空." << endl;
+                break;
+           case '5':
+			    if (sa.Top(x) == SUCCESS)
+			           cout << endl << "栈顶元素值为：" << x << "." << endl;
+                else
+			           cout << endl << "栈为空." << endl;
+			    break;
+		}
+	}
+
+	system("PAUSE");  
+	return 0;  
 }
 
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
 
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
