@@ -1,10 +1,6 @@
 #include <iostream>
 #include "QStack.h"
 
-int main(void)
-{#include <iostream>
-#include "QStack.h"
-
 
 int main()
 {
