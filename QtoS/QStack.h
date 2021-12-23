@@ -148,13 +148,12 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 	int length = q[cur].GetLength() - stacklength;	//需要归并倒置的元素数量
 	int count = length;
 	int templength;			//templength为实际需要补齐的数量
-	int c = 1;
 	ElemType blank;			//填补空位的元素 用来处理非2^n个新增数据的情况
 	Top(blank);				//blank必须进行初始化
 
 	for (int i = 2; i < length * 2; i *= 2)
 	{
-		templength = i - length % i;
+		templength = i - length % i;	
 
 		for (int j = 0; j < templength; j++)		//补齐队列为i的倍数  务必确保maxsize是可以表达为2^m的整数 
 		{
@@ -180,7 +179,7 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 			for (int k = 0; k < i / 2; k++)	//在空表作逆序
 			{
 				q[1 - cur].DelQueue(e);
-				q[1 - cur].EnQueue(e);
+				q[1 - cur].EnQueue(e);  
 			}
 			for (int k = 0; k < i; k++)		//逆序完回到原来的表
 			{
@@ -191,86 +190,19 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 
 		if (templength != 0)		//每一轮次的最后一组单独考虑
 		{
-			if (i * 2 >= length * 2)
+			for (int j = 0; j < i - templength; j++)
 			{
-				cout << "case 1" << endl;
-				for (int j = 0; j < i/2; j++)
-				{
-					q[cur].DelQueue(e);
-					q[cur].EnQueue(e);
-					cout << "排队尾: ";
-					q[cur].Traverse(Write<double>);	cout << endl;
-				}
-				for (int j = 0; j < i - templength-i/2; j++)
-				{
-					q[cur].DelQueue(e);
-					q[1-cur].EnQueue(e);
-					cout << "排到另一表: ";
-					q[cur].Traverse(Write<double>);	cout << endl;
-				}
-				for (int j = 0; j < templength; j++)
-				{
-					q[cur].DelQueue(e);
-					cout << "清除补齐元素: ";
-					q[cur].Traverse(Write<double>);	cout << endl;
-				}
-				for (int j = 0; j < i/2;j++)
-				{
-					q[cur].DelQueue(e);
-					q[1 - cur].EnQueue(e);
-					cout << "排到另一表: ";
-					q[cur].Traverse(Write<double>);	cout << endl;
-				}
-				cur = 1 - cur;
+				q[cur].DelQueue(e);
+				q[cur].EnQueue(e);
+				cout << "排队尾: ";
+				q[cur].Traverse(Write<double>);	cout << endl;
 			}
-			else if (c <= i - templength)
+			for (int j = 0; j < templength; j++)
 			{
-				cout << "case 2" << endl;
-				for (int j = 0; j < i - templength; j++)
-				{
-					q[cur].DelQueue(e);
-					q[1 - cur].EnQueue(e);
-					cout << "排到另一表: ";
-					q[cur].Traverse(Write<double>);	cout << endl;
-				}
-				int t = i - templength;
-				for (int k = 0; k < i / 2; k++)	//在空表作逆序
-				{
-					q[1 - cur].DelQueue(e);
-					q[1 - cur].EnQueue(e);
-				}
-				for (int j = 0; j < t; j++)
-				{
-					q[1 - cur].DelQueue(e);
-					q[cur].EnQueue(e);
-					cout << "排队尾: ";
-					q[cur].Traverse(Write<double>);	cout << endl;
-				}
-				for (int j = 0; j < templength; j++)
-				{
-					q[cur].DelQueue(e);
-					cout << "清除补齐元素: ";
-					q[cur].Traverse(Write<double>);	cout << endl;
-				}
+				q[cur].DelQueue(e);
+				cout << "清除补齐元素: ";
+				q[cur].Traverse(Write<double>);	cout << endl;
 			}
-			else
-			{
-				cout << "case 3" << endl;
-				for (int j = 0; j < i - templength; j++)
-				{
-					q[cur].DelQueue(e);
-					q[cur].EnQueue(e);
-					cout << "排队尾: ";
-					q[cur].Traverse(Write<double>);	cout << endl;
-				}
-				for (int j = 0; j < templength; j++)
-				{
-					q[cur].DelQueue(e);
-					cout << "清除补齐元素: ";
-					q[cur].Traverse(Write<double>);	cout << endl;
-				}
-			}
-			c *= 2;
 		}
 
 		cout << "当前轮次: ";
@@ -284,7 +216,6 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 		q[cur].EnQueue(e);
 	}
 }
-
 
 template<class ElemType>
 void QStack<ElemType>::Push(ElemType stop, int size, istream& in)
