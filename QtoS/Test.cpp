@@ -1,5 +1,6 @@
 #include <iostream>
 #include "QStack.h"
+#include "stop_watch.h"
 
 double gettime(int restart = 0)					// 参数带默认值，非零表示重新计时
 {											// 否则累计计时
@@ -9,8 +10,11 @@ double gettime(int restart = 0)					// 参数带默认值，非零表示重新�
 	return c * (double(clock()) - t);					// 从上一计时点到现在所经历的时间
 }
 
+void test();
+
 int main()
 {
+	test();
 	double e = 0;
 	QStack<double> s;
 	/*
@@ -112,3 +116,51 @@ return 0;
 }
 */
 
+void test()
+{
+	stop_watch watch;							//计时器
+	QStack<int> s1,s2,s3;
+	int edge=1000,route=1;
+	double t1=0,t2=0,t3=0;
+	while(edge>5 )
+	{
+		watch.start();
+		for(int i=1;i<=edge;i++)
+			s1.Push_Switch(i);					//入栈_左手倒右手
+		watch.stop();
+		t1 += watch.elapsed_ms();
+		//cout << t1 <<"ms"<< endl;				//毫秒
+		
+		watch.restart();
+		for(int i=1;i<=edge;i++)
+			s2.Push_Queue(i);					//入队列
+		s2.Push_Merge();						//入栈_归并倒置
+		watch.stop();
+		t2 += watch.elapsed_ms();
+		//cout << t2 <<"ms"<< endl;
+		
+		watch.restart();
+		for(int i=1;i<=edge;i++)
+			s3.Push_Solo(i);					//入栈_单队列操作
+		watch.stop();
+		t3 += watch.elapsed_ms();
+		//cout << t3 <<"ms"<< endl;
+		
+		if(route == 0)							//每五轮判断一次
+		{
+			if(t1<t2)	break;					//每五轮时间总和 判断大小
+			t1=0;t2=0;t3=0;
+		}
+		
+		s1.Clear();
+		s2.Clear();
+		s3.Clear();
+		edge--;
+		route = (route+1)%5;
+	}
+	cout << t1/5 <<"ms"<< endl;
+	cout << t2/5 <<"ms"<< endl;
+	cout << t3/5 <<"ms"<< endl;
+	cout << "edge = "<< edge << endl;
+	system("Pause");
+}
