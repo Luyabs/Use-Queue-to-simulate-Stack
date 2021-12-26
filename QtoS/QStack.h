@@ -447,3 +447,35 @@ QStack<ElemType>& QStack<ElemType>::operator =(const QStack<ElemType>& s)
 	}
 	return *this;
 }
+
+template<class ElemType>
+Status QStack<ElemType>::Push_Solo(const ElemType e)			// 入栈_单队列操作 
+{
+	if(IsFull(1))												//全满 异常处理
+		return OVERFLOW;
+	else if(q[cur].IsFull())									//当前队列已满 换列
+		cur = 1 - cur;
+	if(q[cur].IsEmpty())										//列为空 直接插入
+	{
+		q[cur].EnQueue(e);
+		return SUCCESS;
+	}
+	int L = q[cur].GetLength();
+	if (L <= q[cur].maxSize)
+	{
+		ElemType t;
+		q[cur].DelQueue(t);										//先删除后插入
+		q[cur].EnQueue(e);
+		for (int i = 0; i < L-1; i++)
+		{
+			q[cur].EnQueue(t);
+			q[cur].DelQueue(t);
+		}
+		q[cur].EnQueue(t);
+		return SUCCESS;
+	}
+	else
+	{
+		return Status();
+	}
+}
