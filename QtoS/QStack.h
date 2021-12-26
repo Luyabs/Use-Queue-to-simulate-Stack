@@ -16,6 +16,7 @@ public:
 	bool IsFull(int mode = 1) const;				// 判断栈中队列是否已满 //mode = 1 两条队列是否全满队?	  mode = 2 有且仅有一条队列满队?
 	Status Clear();									// 将栈清空
 	void Traverse(void (*Visit)(const ElemType&)) const;	// 遍历栈
+	Status Push_Queue(const ElemType e);				//入队列
 	Status Push_Switch(const ElemType e);				    // 入栈_左手倒右手 时间复杂度O(n^2)
 	void Push_Merge(int stacklength = 0);				// stacklength是原来栈中有序元素的数量	入栈_归并倒置 时间复杂度O(nlogn)
 	Status Push_Solo(const ElemType e);						// 入栈_单队列操作 时间复杂度O(n^2)
@@ -452,7 +453,7 @@ template<class ElemType>
 Status QStack<ElemType>::Push_Solo(const ElemType e)			// 入栈_单队列操作 
 {
 	if(IsFull(1))												//全满 异常处理
-		return OVERFLOW;
+		return Status();
 	else if(q[cur].IsFull())									//当前队列已满 换列
 		cur = 1 - cur;
 	if(q[cur].IsEmpty())										//列为空 直接插入
@@ -478,4 +479,15 @@ Status QStack<ElemType>::Push_Solo(const ElemType e)			// 入栈_单队列操作
 	{
 		return Status();
 	}
+}
+
+template<class ElemType>
+Status QStack<ElemType>::Push_Queue(const ElemType e)							//入队列
+{
+	if(IsFull(1))												//全满 异常处理
+		return Status();
+	else if(q[cur].IsFull())									//当前队列已满 换列
+		cur = 1 - cur;
+	q[cur].EnQueue(e);
+	return SUCCESS;
 }
