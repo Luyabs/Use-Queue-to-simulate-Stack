@@ -426,12 +426,12 @@ void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklength是原�
 
 
 template<class ElemType>
-void QStack<ElemType>::Push(ElemType stop, int size, istream& in)
+void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 {
 	ElemType buffer;		//输入流缓
 	ElemType* e = new ElemType[size];
 	int length;
-	int edge = -3;		//！！！此处需要通过分析数据找到合适的数字，暂定2048  if else 的判定条件也应该更复杂 需要考虑"栈"中原来有多少元素(需添加函数中的临时变量)
+	//int edge = 10;		//！！！此处需要通过分析数据找到合适的数字，暂定2048  if else 的判定条件也应该更复杂 需要考虑"栈"中原来有多少元素(需添加函数中的临时变量)
 	int process = 1;
 	int stack_length = GetLength();		//"栈"中原来有多少数据
 
@@ -442,7 +442,7 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in)
 			break;
 		e[length] = buffer;
 	}
-	if (length + stack_length < edge)
+	if (choice == 1)
 	{
 		cout << "正在调用Push_Switch:" << endl;
 		for (int i = 0; i < length; i++)
@@ -471,7 +471,7 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in)
 			}
 		}
 	}
-	else if (length + stack_length >= edge)
+	else if (choice == 2)
 	{
 		cout << "正在调用Push_Merge:" << endl;
 		for (int i = 0; i < length; i++)
@@ -488,7 +488,54 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in)
 					cur = 1 - cur;
 				}
 				if (i == length - 1)
+				{
+					int sort_num = 1;
+					int x;
+					for (; sort_num * 2 <= length; sort_num *= 2);
+					sort_num *= 2;
 					Push_Merge(stack_length);	//没有要push的元素就归并倒置
+					x = sort_num;
+				}
+
+				break;
+			case 2:
+				if (IsFull(1) == 0)		//有一条队列已满 调用单队列作栈法
+					//Push_Solo(e[i]);
+				//else
+					//return OVERFLOW;	//栈满溢出
+					break;
+			default:
+				break;
+			}
+
+
+		}
+	}
+	else if(choice == 3)
+	{
+		cout << "正在调用Push_Merge_Neo:" << endl;
+		for (int i = 0; i < length; i++)
+		{
+			switch (process)
+			{
+			case 1:
+				if (IsFull(3))		//当前两条队列不满
+					q[cur].EnQueue(e[i]);	//将数据全插进去
+				else
+				{
+					process = 2;
+					Push_Merge_Neo(stack_length);	//填满就归并倒置
+					cur = 1 - cur;
+				}
+				if (i == length - 1)
+				{
+					int sort_num = 1;
+					int x;
+					for (; sort_num * 2 <= length; sort_num *= 2);
+					sort_num *= 2;
+					Push_Merge_Neo(stack_length);	//没有要push的元素就归并倒置
+					x = sort_num;
+				}
 
 				break;
 			case 2:
