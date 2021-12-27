@@ -19,6 +19,7 @@ public:
 	Status Push_Queue(const ElemType e);				//入队列
 	Status Push_Switch(const ElemType e);				    // 入栈_左手倒右手 时间复杂度O(n^2)
 	void Push_Merge(int stacklength = 0);				// stacklength是原来栈中有序元素的数量	入栈_归并倒置 时间复杂度O(nlogn)
+	void Push_Merge_Neo(int stacklength = 0);
 	Status Push_Solo(const ElemType e);						// 入栈_单队列操作 时间复杂度O(n^2)
 	void Push(ElemType stop, int size = 100, istream& in = cin);	 // 整合版入栈Push 参数分别为:终止符/数据大小/输入流
 	Status Top(ElemType& e) const;				    // 取顶元素
@@ -303,6 +304,124 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 		q[cur].DelQueue(e);
 		q[cur].EnQueue(e);
 	}
+}
+
+template<class ElemType>
+void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklength是原来栈中有序元素的数量	入栈_归并倒置 时间复杂度O(nlogn)
+{	//必须要去stacklength不出错
+	ElemType e;			//用于接收一次弹出数据
+	int length = q[cur].GetLength() - stacklength;	//需要归并倒置的元素数量
+	int count = length;
+	int templength;			//templength为实际需要补齐的数量
+	int sort_num = 1;
+	ElemType blank;			//填补空位的元素 用来处理非2^n个新增数据的情况
+	Top(blank);				//blank必须进行初始化
+
+	if (length <= 1)return;
+	for (; sort_num * 2 <= length; sort_num *= 2);
+	count = sort_num / 2;
+
+	for (int i = 2; i/2 < length && count > 0; i *= 2)
+	{
+		templength = i - length % i;
+
+
+		//q[cur].Traverse(Write<double>);	cout << endl;
+
+		for (int j = 0; j < stacklength; j++)		//让"栈"中原来的元素(存在一条队列中)回到队列的尾
+		{
+			//cout << "原有元素排队尾" << endl;
+			q[cur].DelQueue(e);
+			q[cur].EnQueue(e);
+		}
+		//cout << i << endl;
+		//cout << count << endl;
+		for (int j = 0; j < count; j++)
+		{
+			for (int k = 0; k < i; k++)		//让所有新增的元素以2^k个一组，挪到另一个空表
+			{
+				q[cur].DelQueue(e);
+				q[1 - cur].EnQueue(e);  //cout << "出队列: ";   //q[cur].Traverse(Write<double>);	cout << endl;
+			}
+			for (int k = 0; k < i / 2; k++)	//在空表作逆序
+			{
+				q[1 - cur].DelQueue(e);
+				q[1 - cur].EnQueue(e);
+			}
+			for (int k = 0; k < i; k++)		//逆序完回到原来的表
+			{
+				q[1 - cur].DelQueue(e);
+				q[cur].EnQueue(e);  //cout << "回队列: ";  //q[cur].Traverse(Write<double>);	cout << endl;
+			}
+		}
+		
+		if (length - sort_num != 0)		
+		{
+			for (int j = 0; j < length - sort_num; j++)
+			{
+				q[cur].DelQueue(e);
+				q[cur].EnQueue(e);
+				//cout << "排队尾: ";
+				//q[cur].Traverse(Write<double>);	cout << endl;
+			}
+		}
+
+		count /= 2;
+
+		//cout << "当前轮次: ";
+		//q[cur].Traverse(Write<double>);	cout << endl;
+		//cout << "LOOP" << endl;
+	}
+	if (length - sort_num == 1)
+	{
+		for (int i = 0; i < stacklength; i++)		//让"栈"中原来的元素(存在一条队列中)回到队列的尾
+		{
+			q[cur].DelQueue(e);
+			q[1 - cur].EnQueue(e);
+		}
+		for (int i = 0; i < sort_num; i++)
+		{
+			q[cur].DelQueue(e);
+			q[cur].EnQueue(e);
+		}
+		for (int i = 0; i < stacklength; i++)		//让"栈"中原来的元素(存在一条队列中)回到队列的尾
+		{
+			q[1 - cur].DelQueue(e);
+			q[cur].EnQueue(e);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < stacklength; i++)		//让"栈"中原来的元素(存在一条队列中)回到队列的尾
+		{
+			q[cur].DelQueue(e);
+			q[cur].EnQueue(e);
+		}
+		for (int i = 0; i < sort_num; i++)
+		{
+			q[cur].DelQueue(e);
+			q[1 - cur].EnQueue(e);
+		}
+		for (int i = 0; i < length - sort_num; i++)
+		{
+			q[cur].DelQueue(e);
+			q[cur].EnQueue(e);
+		}
+		for (int i = 0; i < stacklength; i++)		//让"栈"中原来的元素(存在一条队列中)回到队列的尾
+		{
+			q[cur].DelQueue(e);
+			q[1 - cur].EnQueue(e);
+		}
+		for (int i = 0; i < length - sort_num; i++)
+		{
+			q[cur].DelQueue(e);
+			q[1 - cur].EnQueue(e);
+		}
+		cur = 1 - cur;
+	}
+	
+	//cout << "finish" << endl;
+	Push_Merge_Neo(stacklength + sort_num);
 }
 
 
