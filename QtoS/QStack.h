@@ -21,7 +21,7 @@ public:
 	void Push_Merge(int stacklength = 0);				// stacklength是原来栈中有序元素的数量	入栈_归并倒置 时间复杂度O(nlogn)
 	void Push_Merge_Neo(int stacklength = 0);
 	Status Push_Solo(const ElemType e);						// 入栈_单队列操作 时间复杂度O(n^2)
-	void Push(ElemType stop, int size = 100, istream& in = cin);	 // 整合版入栈Push 参数分别为:终止符/数据大小/输入流
+	void Push(ElemType stop, int size = 100, istream& in = cin, int choice = 1);	 // 整合版入栈Push 参数分别为:终止符/数据大小/输入流/choice=1时switch，2时Merge,3时使用Merge_Neo
 	Status Top(ElemType& e) const;				    // 取顶元素
 	Status Pop();					    // 简化出栈 不接收弹出的元素
 	Status Pop(ElemType& e);					    // 出栈 用e接收弹出的元素
