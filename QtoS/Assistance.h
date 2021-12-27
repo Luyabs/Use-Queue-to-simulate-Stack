@@ -2,10 +2,30 @@
 #define __ASSISTANCE_H__				// 那么定义__ASSISTANCE_H__
 
 // 辅助软件包
+#include <iostream>					// 标准流操作
+using namespace std;				// 标准库包含在命名空间std中
 
+
+// 宏定义
+#define DEFAULT_SIZE 131072			// 缺省元素个数
+#define DEFAULT_INFINITY 1000000	// 缺省无穷大
+
+// 自定义类型
+enum Status {
+	SUCCESS, FAIL, UNDER_FLOW, OVER_FLOW, RANGE_ERROR, DUPLICATE_ERROR,
+	NOT_PRESENT, ENTRY_INSERTED, ENTRY_FOUND, VISITED, UNVISITED
+};
+
+template <class ElemType>
+void Write(const ElemType& e)
+// 操作结果: 显示数据元素
+{
+	cout << e << "  ";
+}
+
+/*
 // ANSI C++标准库头文件
 #include <cstring>					// 标准串操作
-#include <iostream>					// 标准流操作
 #include <limits>					// 极限
 #include <cmath>					// 数据函数
 #include <fstream>					// 文件输入输出
@@ -16,18 +36,14 @@
 #include <iomanip>					// 输入输出流格式设置	
 #include <cstdarg> 					// 支持变长函数参数	
 #include <cassert>					// 支持断言
-using namespace std;				// 标准库包含在命名空间std中
+*/
 
-// 自定义类型
-enum Status {SUCCESS, FAIL, UNDER_FLOW, OVER_FLOW,RANGE_ERROR, DUPLICATE_ERROR,
-	NOT_PRESENT, ENTRY_INSERTED, ENTRY_FOUND, VISITED, UNVISITED};
 
-// 宏定义
-#define DEFAULT_SIZE 4096			// 缺省元素个数
-#define DEFAULT_INFINITY 1000000	// 缺省无穷大
 
 
 // 辅助函数声明
+
+/*
 
 char GetChar(istream &inStream = cin); // 从输入流inStream中跳过空格及制表符获取一字符
 
@@ -105,20 +121,6 @@ void Display(ElemType elem[], int n)
 	}
 	cout << endl; 
 }
-
-template <class ElemType>
-void Write(const ElemType &e)
-// 操作结果: 显示数据元素
-{
-    cout << e << "  ";
-}
-
-double gettime(int restart = 0)					// 参数带默认值，非零表示重新计时
-{											// 否则累计计时
-	const double c = 1.0 / CLOCKS_PER_SEC;
-	static double t = double(clock());				// 静态局部变量。第一次调用时，确定计时起点
-	if (restart) t = double(clock());				// 根据实参决定是否重新确定计时起点
-	return c * (double(clock()) - t);					// 从上一计时点到现在所经历的时间
-}
+*/
 
 #endif
