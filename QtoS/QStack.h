@@ -16,11 +16,11 @@ public:
 	bool IsFull(int mode = 1) const;				// 判断栈中队列是否已满 //mode = 1 两条队列是否全满队?	  mode = 2 有且仅有一条队列满队?
 	Status Clear();									// 将栈清空
 	void Traverse(void (*Visit)(const ElemType&)) const;	// 遍历栈
-	Status Push_Queue(const ElemType e);				//入队列
 	Status Push_Switch(const ElemType e);				    // 入栈_左手倒右手 时间复杂度O(n^2)
 	void Push_Merge(int stacklength = 0);				// stacklength是原来栈中有序元素的数量	入栈_归并倒置 时间复杂度O(nlogn)
 	void Push_Merge_Neo(int stacklength = 0);
 	Status Push_Solo(const ElemType e);						// 入栈_单队列操作 时间复杂度O(n^2)
+	Status Push_Queue(const ElemType e);
 	void Push(ElemType stop, int size = 100, istream& in = cin, int choice = 1);	 // 整合版入栈Push 参数分别为:终止符/数据大小/输入流/choice=1时switch，2时Merge,3时使用Merge_Neo
 	Status Top(ElemType& e) const;				    // 取顶元素
 	Status Pop();					    // 简化出栈 不接收弹出的元素
@@ -70,7 +70,7 @@ bool QStack<ElemType>::IsEmpty(int mode) const		//mode = 1 两条队列是否全
 	case 3:
 		return (emp1 ^ emp2) == 1;
 	default:
-		throw (int)FAIL;
+		//throw (int)FAIL;
 		break;
 	}
 }
@@ -122,6 +122,49 @@ void QStack<ElemType>::Traverse(void (*Visit)(const ElemType&)) const
 }
 
 template<class ElemType>
+Status QStack<ElemType>::Push_Solo(const ElemType e)			// 入栈_单队列操作 
+{
+	if (IsFull(1))												//全满 异常处理
+		return Status();
+	else if (q[cur].IsFull())									//当前队列已满 换列
+		cur = 1 - cur;
+	if (q[cur].IsEmpty())										//列为空 直接插入
+	{
+		q[cur].EnQueue(e);
+		return SUCCESS;
+	}
+	int L = q[cur].GetLength();
+	if (L <= q[cur].maxSize)
+	{
+		ElemType t;
+		q[cur].DelQueue(t);										//先删除后插入
+		q[cur].EnQueue(e);
+		for (int i = 0; i < L - 1; i++)
+		{
+			q[cur].EnQueue(t);
+			q[cur].DelQueue(t);
+		}
+		q[cur].EnQueue(t);
+		return SUCCESS;
+	}
+	else
+	{
+		return Status();
+	}
+}
+
+template<class ElemType>
+Status QStack<ElemType>::Push_Queue(const ElemType e)							//入队列
+{
+	if (IsFull(1))												//全满 异常处理
+		return Status();
+	else if (q[cur].IsFull())									//当前队列已满 换列
+		cur = 1 - cur;
+	q[cur].EnQueue(e);
+	return SUCCESS;
+}
+
+template<class ElemType>
 Status QStack<ElemType>::Push_Switch(const ElemType e)
 {
 	int L = q[cur].GetLength();
@@ -153,10 +196,14 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 	int c = 1;
 	ElemType blank;			//填补空位的元素 用来处理非2^n个新增数据的情况
 	Top(blank);				//blank必须进行初始化
+	bool flag = 0;
 
-	for (int i = 2; i < length * 2; i *= 2)
+	for (int i = 2; i <= length; i *= 2)
 	{
 		templength = i - length % i;
+		if ((length & i) == 0 || length == i)templength = 0;
+		cout << "i:" << i << endl;
+		cout << "tem:" << templength << endl;
 
 		for (int j = 0; j < templength; j++)		//补齐队列为i的倍数  务必确保maxsize是可以表达为2^m的整数 
 		{
@@ -211,17 +258,10 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 			}
 			else
 			{
-				if (i * 2 >= length * 2)
+				if (i * 2 > length )
 				{
 					cout << "case 1" << endl;
-					for (int j = 0; j < i / 2; j++)
-					{
-						q[cur].DelQueue(e);
-						q[cur].EnQueue(e);
-						//cout << "排队尾: ";
-						//q[cur].Traverse(Write<double>);	cout << endl;
-					}
-					for (int j = 0; j < i - templength - i / 2; j++)
+					for (int j = 0; j < i - templength ; j++)
 					{
 						q[cur].DelQueue(e);
 						q[1 - cur].EnQueue(e);
@@ -234,7 +274,14 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 						//cout << "清除补齐元素: ";
 						//q[cur].Traverse(Write<double>);	cout << endl;
 					}
-					for (int j = 0; j < i / 2; j++)
+					for (int j = 0; j < stacklength; j++)
+					{
+						q[cur].DelQueue(e);
+						q[cur].EnQueue(e);
+						//cout << "排队尾: ";
+						//q[cur].Traverse(Write<double>);	cout << endl;
+					}
+					for (int j = 0; j < i+stacklength; j++)
 					{
 						q[cur].DelQueue(e);
 						q[1 - cur].EnQueue(e);
@@ -242,6 +289,7 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 						//q[cur].Traverse(Write<double>);	cout << endl;
 					}
 					cur = 1 - cur;
+					flag = 1;
 				}
 				else if (c <= i - templength)
 				{
@@ -299,12 +347,13 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklength是原来栈
 		//cout << "LOOP" << endl;
 	}
 
-	for (int i = 0; i < stacklength; i++)		//让"栈"中原来的元素(存在一条队列中)回到队列的尾
+	for (int i = 0; i < stacklength && flag; i++)		//让"栈"中原来的元素(存在一条队列中)回到队列的尾
 	{
 		q[cur].DelQueue(e);
 		q[cur].EnQueue(e);
 	}
 }
+
 
 template<class ElemType>
 void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklength是原来栈中有序元素的数量	入栈_归并倒置 时间复杂度O(nlogn)
@@ -462,10 +511,11 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 				break;
 			case 2:
 				if (IsFull(1) == 0)		//有一条队列已满 调用单队列作栈法
-					//Push_Solo(e[i]);
-				//else
-					//return OVERFLOW;	//栈满溢出
-					break;
+				{
+					cout << "push_solo" << endl;
+					Push_Solo(e[i]);
+				}
+				break;
 			default:
 				break;
 			}
@@ -479,31 +529,27 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 			switch (process)
 			{
 			case 1:
-				if (IsFull(3))		//当前两条队列不满
+				if (IsFull(3) && (i+stack_length+1)<=(DEFAULT_SIZE/2))		//当前两条队列不满
 					q[cur].EnQueue(e[i]);	//将数据全插进去
 				else
 				{
 					process = 2;
 					Push_Merge(stack_length);	//填满就归并倒置
 					cur = 1 - cur;
+					i--;
 				}
 				if (i == length - 1)
 				{
-					int sort_num = 1;
-					int x;
-					for (; sort_num * 2 <= length; sort_num *= 2);
-					sort_num *= 2;
 					Push_Merge(stack_length);	//没有要push的元素就归并倒置
-					x = sort_num;
 				}
-
 				break;
 			case 2:
 				if (IsFull(1) == 0)		//有一条队列已满 调用单队列作栈法
-					//Push_Solo(e[i]);
-				//else
-					//return OVERFLOW;	//栈满溢出
-					break;
+				{
+					cout << "push_solo" << endl;
+					Push_Solo(e[i]);
+				}
+				break;
 			default:
 				break;
 			}
@@ -529,21 +575,16 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 				}
 				if (i == length - 1)
 				{
-					int sort_num = 1;
-					int x;
-					for (; sort_num * 2 <= length; sort_num *= 2);
-					sort_num *= 2;
 					Push_Merge_Neo(stack_length);	//没有要push的元素就归并倒置
-					x = sort_num;
 				}
-
 				break;
 			case 2:
 				if (IsFull(1) == 0)		//有一条队列已满 调用单队列作栈法
-					//Push_Solo(e[i]);
-				//else
-					//return OVERFLOW;	//栈满溢出
-					break;
+				{
+					cout << "push_solo" << endl;
+					Push_Solo(e[i]);
+				}
+				break;
 			default:
 				break;
 			}
@@ -613,47 +654,4 @@ QStack<ElemType>& QStack<ElemType>::operator =(const QStack<ElemType>& s)
 			q[i] = s.q[i];
 	}
 	return *this;
-}
-
-template<class ElemType>
-Status QStack<ElemType>::Push_Solo(const ElemType e)			// 入栈_单队列操作 
-{
-	if(IsFull(1))												//全满 异常处理
-		return Status();
-	else if(q[cur].IsFull())									//当前队列已满 换列
-		cur = 1 - cur;
-	if(q[cur].IsEmpty())										//列为空 直接插入
-	{
-		q[cur].EnQueue(e);
-		return SUCCESS;
-	}
-	int L = q[cur].GetLength();
-	if (L <= q[cur].maxSize)
-	{
-		ElemType t;
-		q[cur].DelQueue(t);										//先删除后插入
-		q[cur].EnQueue(e);
-		for (int i = 0; i < L-1; i++)
-		{
-			q[cur].EnQueue(t);
-			q[cur].DelQueue(t);
-		}
-		q[cur].EnQueue(t);
-		return SUCCESS;
-	}
-	else
-	{
-		return Status();
-	}
-}
-
-template<class ElemType>
-Status QStack<ElemType>::Push_Queue(const ElemType e)							//入队列
-{
-	if(IsFull(1))												//全满 异常处理
-		return Status();
-	else if(q[cur].IsFull())									//当前队列已满 换列
-		cur = 1 - cur;
-	q[cur].EnQueue(e);
-	return SUCCESS;
 }
