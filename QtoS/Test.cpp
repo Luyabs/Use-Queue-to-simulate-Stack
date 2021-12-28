@@ -11,10 +11,13 @@ double gettime(int restart = 0)					// 参数带默认值，非零表示重新�
 }
 
 void test();
+void test2(int num=0);
+void OpenMenu();
 
 int main()
 {
-	test();
+	OpenMenu();
+	return 0;
 	double e = 0;
 	QStack<double> s;
 	/*
@@ -64,57 +67,96 @@ int main()
 	s.Traverse((Write<double>));	cout << endl;
 	cout << "IsEmpty3?  " << s.IsEmpty(3) << endl;
 }
-/*
-char c = '#';
-QStack<int> sa;
-int x;
-while (c != '0')	{
-	cout << endl << "1. 生成栈.";
-	cout << endl << "2. 显示栈.";
-	cout << endl << "3. 入栈.";
-	cout << endl << "4. 出栈.";
-	cout << endl << "5. 取栈顶.";
-	cout << endl << "0. 退出";
-	cout << endl << "选择功能(0~5):";
-	cin >> c;
-	switch (c) 		{
-		case '1':
-			sa.Clear();
-			cout << "输入e(e =0时退出)" << endl;
-			cin >> x;
-			while (x != 0){
-				sa.Push(x);
+
+void OpenMenu()
+{
+	char c1 = '#';
+	char c2 = '#';
+	QStack<int> sa;
+	int x;
+	int num;
+	while (c1 != '0')	
+	{
+		cout << endl << "队列模拟栈";
+		cout << endl << "1. 生成栈.\t" << "a. Push_Switch\t" << "b. Push_Merge\t" << "c. Push_Solo";
+		cout << endl << "2. 显示栈.";
+		cout << endl << "3. 入栈.";
+		cout << endl << "4. 出栈.";
+		cout << endl << "5. 取栈顶.";
+		cout << endl << "6. 运算速度测试.";
+		cout << endl << "0. 退出";
+		cout << endl << "选择功能(0~6):";
+		cin >> c1;
+		switch (c1) 		{
+			case '1':
+				cin >>c2;
+				switch (c2)
+				{
+					case 'a':
+						sa.Clear();
+						cout << "输入e(e =0时退出)" << endl;
+						cin >> x;
+						while (x != 0){
+							sa.Push_Switch(x);
+							cin >> x;
+						}
+						break;
+					case 'b':
+						sa.Clear();
+						cout << "输入e(e =0时退出)" << endl;
+						cin >> x;
+						while (x != 0){
+							sa.Push_Queue(x);
+							cin >> x;
+						}
+						sa.Push_Merge_Neo();
+						break;
+					case 'c':
+						sa.Clear();
+						cout << "输入e(e =0时退出)" << endl;
+						cin >> x;
+						while (x != 0){
+							sa.Push_Solo(x);
+							cin >> x;
+						}
+						break;
+					default:
+						break;
+				}
+				
+		   case '2':
+				cout << endl;
+				sa.Traverse(Write<int>);
+				break;
+		   case '3':
+				cout << endl << "输入元素值:";
 				cin >> x;
-			}
-			break;
-	   case '2':
-			cout << endl;
-			sa.Traverse(Write<int>);
-			break;
-	   case '3':
-			cout << endl << "输入元素值:";
-			cin >> x;
-			sa.Push(x);
-			break;
-	   case '4':
-			if (sa.Pop(x) == SUCCESS)
-				   cout << endl << "栈顶元素值为：" << x << "." << endl;
-			else
-				   cout << endl << "栈为空." << endl;
-			break;
-	   case '5':
-			if (sa.Top(x) == SUCCESS)
-				   cout << endl << "栈顶元素值为：" << x << "." << endl;
-			else
-				   cout << endl << "栈为空." << endl;
-			break;
+				sa.Push_Switch(x);
+				break;
+		   case '4':
+				if (sa.Pop(x) == SUCCESS)
+					   cout << endl << "栈顶元素值为：" << x << "." << endl;
+				else
+					   cout << endl << "栈为空." << endl;
+				break;
+		   case '5':
+				if (sa.Top(x) == SUCCESS)
+					   cout << endl << "栈顶元素值为：" << x << "." << endl;
+				else
+					   cout << endl << "栈为空." << endl;
+				break;
+		   case '6':
+			   cout << endl << "输入测试值:";
+			   cin >> num;
+			   test2(num);
+			   break;
+		}
 	}
+
+	system("PAUSE");  
 }
 
-system("PAUSE");
-return 0;  
-}
-*/
+
 
 void test()
 {
@@ -134,7 +176,7 @@ void test()
 		watch.restart();
 		for(int i=1;i<=edge;i++)
 			s2.Push_Queue(i);					//入队列
-		s2.Push_Merge();						//入栈_归并倒置
+		s2.Push_Merge_Neo();						//入栈_归并倒置
 		watch.stop();
 		t2 += watch.elapsed_ms();
 		//cout << t2 <<"ms"<< endl;
@@ -163,4 +205,32 @@ void test()
 	cout << t3/5 <<"ms"<< endl;
 	cout << "edge = "<< edge << endl;
 	system("Pause");
+}
+
+void test2(int num)
+{
+	stop_watch watch;							//计时器
+	QStack<int> s1,s2,s3;
+	watch.start();
+	for(int i=1;i<=num;i++)
+		s1.Push_Switch(i);					//入栈_左手倒右手
+	watch.stop();
+	cout << endl <<"Push_Switch:\t";
+	cout << watch.elapsed_ms() << "ms" << endl;
+	
+	watch.restart();
+	for(int i=1;i<=num;i++)
+		s2.Push_Queue(i);					//入队列
+	s2.Push_Merge_Neo();						//入栈_归并倒置
+	watch.stop();
+	cout << endl <<"Push_Merge:\t";
+	cout << watch.elapsed_ms() << "ms" << endl;
+	//cout << t2 <<"ms"<< endl;
+	
+	watch.restart();
+	for(int i=1;i<=num;i++)
+		s3.Push_Solo(i);					//入栈_单队列操作
+	watch.stop();
+	cout << endl <<"Push_Solo:\t";
+	cout << watch.elapsed_ms() << "ms" << endl;
 }
