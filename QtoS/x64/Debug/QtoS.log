@@ -1,0 +1,4 @@
+﻿  Test.cpp
+C:\Users\Lu\Desktop\数据结构\PRO2\QtoS\QtoS\QStack.h(78): warning C4715: “QStack<double>::IsEmpty”: 不是所有的控件路径都返回值
+C:\Users\Lu\Desktop\数据结构\PRO2\QtoS\QtoS\QStack.h(78): warning C4715: “QStack<int>::IsEmpty”: 不是所有的控件路径都返回值
+  QtoS.vcxproj -> C:\Users\Lu\Desktop\数据结构\PRO2\QtoS\x64\Debug\QtoS.exe

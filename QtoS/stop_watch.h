@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include "Windows.h"
 
 class stop_watch
@@ -26,25 +27,21 @@ public:
 		elapsed_ = 0;
 		start();
 	}
-	//Œ¢√Î
 	double elapsed()
 	{
 		return static_cast<double>(elapsed_);
 	}
-	//∫¡√Î
 	double elapsed_ms()
 	{
 		return elapsed_ / 1000.0;
 	}
-	//√Î
 	double elapsed_second()
 	{
 		return elapsed_ / 1000000.0;
 	}
- 
+
 private:
 	LARGE_INTEGER freq_;
 	LARGE_INTEGER begin_time_;
 	long long elapsed_;
 };
- 

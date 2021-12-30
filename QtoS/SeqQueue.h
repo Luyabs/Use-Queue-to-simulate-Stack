@@ -1,64 +1,64 @@
 #ifndef __SQ_QUEUE_H__
 #define __SQ_QUEUE_H__
-#include "Assistance.h"	// è¾…åŠ©è½¯ä»¶åŒ…
+#include "Assistance.h"	// ¸¨ÖúÈí¼ş°ü
 
-// å¾ªç¯é˜Ÿåˆ—ç±»
+// Ñ­»·¶ÓÁĞÀà
 template<class ElemType> class QStack;
 
 template<class ElemType>
 class SeqQueue
 {
 protected:
-	int front, rear;									 // é˜Ÿå¤´é˜Ÿå°¾æŒ‡é’ˆ 
-	int maxSize;										 // é˜Ÿåˆ—å®¹é‡ 
-	ElemType* elems;									 // å…ƒç´ å­˜å‚¨ç©ºé—´
+	int front, rear;									 // ¶ÓÍ·¶ÓÎ²Ö¸Õë 
+	int maxSize;										 // ¶ÓÁĞÈİÁ¿ 
+	ElemType* elems;									 // ÔªËØ´æ´¢¿Õ¼ä
 
 public:
-	SeqQueue(int size = DEFAULT_SIZE);					 // æ„é€ å‡½æ•°
-	virtual ~SeqQueue();								 // ææ„å‡½æ•°
-	int GetLength() const;								 // æ±‚é˜Ÿåˆ—é•¿åº¦			 
-	bool IsEmpty() const;								 // åˆ¤æ–­é˜Ÿåˆ—æ˜¯å¦ä¸ºç©º
+	SeqQueue(int size = DEFAULT_SIZE);					 // ¹¹Ôìº¯Êı
+	virtual ~SeqQueue();								 // Îö¹¹º¯Êı
+	int GetLength() const;								 // Çó¶ÓÁĞ³¤¶È			 
+	bool IsEmpty() const;								 // ÅĞ¶Ï¶ÓÁĞÊÇ·ñÎª¿Õ
 	bool IsFull() const;
-	void Clear();										 // å°†é˜Ÿåˆ—æ¸…ç©º
-	void Traverse(void (*Visit)(const ElemType&)) const;// éå†é˜Ÿåˆ—
-	Status DelQueue();									 // ç®€åŒ–å‡ºé˜Ÿæ“ä½œ
-	Status DelQueue(ElemType& e);					     // å‡ºé˜Ÿæ“ä½œ
-	Status GetHead(ElemType& e) const;				     // å–é˜Ÿå¤´æ“ä½œ
-	Status EnQueue(const ElemType e);				     // å…¥é˜Ÿæ“ä½œ
-	SeqQueue(const SeqQueue<ElemType>& q);			 // å¤åˆ¶æ„é€ å‡½æ•°
-	SeqQueue<ElemType>& operator =(const SeqQueue<ElemType>& q);// èµ‹å€¼è¯­å¥é‡è½½
+	void Clear();										 // ½«¶ÓÁĞÇå¿Õ
+	void Traverse(void (*Visit)(const ElemType&)) const;// ±éÀú¶ÓÁĞ
+	Status DelQueue();									 // ¼ò»¯³ö¶Ó²Ù×÷
+	Status DelQueue(ElemType& e);					     // ³ö¶Ó²Ù×÷
+	Status GetHead(ElemType& e) const;				     // È¡¶ÓÍ·²Ù×÷
+	Status EnQueue(const ElemType e);				     // Èë¶Ó²Ù×÷
+	SeqQueue(const SeqQueue<ElemType>& q);			 // ¸´ÖÆ¹¹Ôìº¯Êı
+	SeqQueue<ElemType>& operator =(const SeqQueue<ElemType>& q);// ¸³ÖµÓï¾äÖØÔØ
 	friend class QStack<ElemType>;
 };
 
-// å¾ªç¯é˜Ÿåˆ—ç±»çš„å®ç°éƒ¨åˆ†
+// Ñ­»·¶ÓÁĞÀàµÄÊµÏÖ²¿·Ö
 
 template<class ElemType>
 SeqQueue<ElemType>::SeqQueue(int size)
-// æ“ä½œç»“æœï¼šæ„é€ ä¸€ä¸ªå®¹é‡ä¸ºsizeçš„ç©ºå¾ªç¯é˜Ÿåˆ—
+// ²Ù×÷½á¹û£º¹¹ÔìÒ»¸öÈİÁ¿ÎªsizeµÄ¿ÕÑ­»·¶ÓÁĞ
 {
-	maxSize = size;							// è®¾ç½®é˜Ÿåˆ—å®¹é‡
-//	if (elems != NULL) delete []elems;	// é‡Šæ”¾å·²æœ‰å­˜å‚¨ç©ºé—´
-	elems = new ElemType[maxSize];			// åˆ†é…å…ƒç´ å­˜å‚¨ç©ºé—´
-	rear = front = 0;						// åˆå§‹åŒ–é˜Ÿå¤´ä¸é˜Ÿå°¾
+	maxSize = size;							// ÉèÖÃ¶ÓÁĞÈİÁ¿
+//	if (elems != NULL) delete []elems;	// ÊÍ·ÅÒÑÓĞ´æ´¢¿Õ¼ä
+	elems = new ElemType[maxSize];			// ·ÖÅäÔªËØ´æ´¢¿Õ¼ä
+	rear = front = 0;						// ³õÊ¼»¯¶ÓÍ·Óë¶ÓÎ²
 }
 
 template <class ElemType>
 SeqQueue<ElemType>::~SeqQueue()
-// æ“ä½œç»“æœï¼šé”€æ¯é˜Ÿåˆ—
+// ²Ù×÷½á¹û£ºÏú»Ù¶ÓÁĞ
 {
-	delete[]elems;							// é‡Šæ”¾å…ƒç´ å­˜å‚¨ç©ºé—´
+	delete[]elems;							// ÊÍ·ÅÔªËØ´æ´¢¿Õ¼ä
 }
 
 template<class ElemType>
 int SeqQueue<ElemType>::GetLength() const
-// æ“ä½œç»“æœï¼šè¿”å›é˜Ÿåˆ—é•¿åº¦			 
+// ²Ù×÷½á¹û£º·µ»Ø¶ÓÁĞ³¤¶È			 
 {
 	return (rear - front + maxSize) % maxSize;
 }
 
 template<class ElemType>
 bool SeqQueue<ElemType>::IsEmpty() const
-// æ“ä½œç»“æœï¼šå¦‚é˜Ÿåˆ—ä¸ºç©ºï¼Œåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
+// ²Ù×÷½á¹û£ºÈç¶ÓÁĞÎª¿Õ£¬Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
 {
 	return rear == front;
 }
@@ -73,14 +73,14 @@ bool SeqQueue<ElemType>::IsFull() const
 
 template<class ElemType>
 void SeqQueue<ElemType>::Clear()
-// æ“ä½œç»“æœï¼šæ¸…ç©ºé˜Ÿåˆ—
+// ²Ù×÷½á¹û£ºÇå¿Õ¶ÓÁĞ
 {
 	rear = front = 0;
 }
 
 template <class ElemType>
 void SeqQueue<ElemType>::Traverse(void (*Visit)(const ElemType&)) const
-// æ“ä½œç»“æœï¼šä¾æ¬¡å¯¹é˜Ÿåˆ—çš„æ¯ä¸ªå…ƒç´ è°ƒç”¨å‡½æ•°(*visit)
+// ²Ù×÷½á¹û£ºÒÀ´Î¶Ô¶ÓÁĞµÄÃ¿¸öÔªËØµ÷ÓÃº¯Êı(*visit)
 {
 	for (int i = front; i != rear; i = (i + 1) % maxSize)
 		(*Visit)(elems[i]);
@@ -88,38 +88,38 @@ void SeqQueue<ElemType>::Traverse(void (*Visit)(const ElemType&)) const
 
 template<class ElemType>
 Status SeqQueue<ElemType>::DelQueue()
-// æ“ä½œç»“æœï¼šå¦‚æœé˜Ÿåˆ—éç©ºï¼Œé‚£ä¹ˆåˆ é™¤é˜Ÿå¤´å…ƒç´ ï¼Œå¹¶ç”¨eè¿”å›å…¶å€¼ï¼Œå‡½æ•°è¿”å›SUCCESS,
-// å¦åˆ™å‡½æ•°è¿”å›UNDER_FLOWï¼Œ
+// ²Ù×÷½á¹û£ºÈç¹û¶ÓÁĞ·Ç¿Õ£¬ÄÇÃ´É¾³ı¶ÓÍ·ÔªËØ£¬²¢ÓÃe·µ»ØÆäÖµ£¬º¯Êı·µ»ØSUCCESS,
+// ·ñÔòº¯Êı·µ»ØUNDER_FLOW£¬
 {
-	if (!IsEmpty()) {	// é˜Ÿåˆ—éç©º
-		front = (front + 1) % maxSize;		// frontæŒ‡å‘ä¸‹ä¸€å…ƒç´ 
+	if (!IsEmpty()) {	// ¶ÓÁĞ·Ç¿Õ
+		front = (front + 1) % maxSize;		// frontÖ¸ÏòÏÂÒ»ÔªËØ
 		return SUCCESS;
 	}
-	else	// é˜Ÿåˆ—ä¸ºç©º
+	else	// ¶ÓÁĞÎª¿Õ
 		return UNDER_FLOW;
 }
 
 template<class ElemType>
 Status SeqQueue<ElemType>::DelQueue(ElemType& e)
-// æ“ä½œç»“æœï¼šå¦‚æœé˜Ÿåˆ—éç©ºï¼Œé‚£ä¹ˆåˆ é™¤é˜Ÿå¤´å…ƒç´ ï¼Œå¹¶ç”¨eè¿”å›å…¶å€¼ï¼Œå‡½æ•°è¿”å›SUCCESS,
-// å¦åˆ™å‡½æ•°è¿”å›UNDER_FLOWï¼Œ
+// ²Ù×÷½á¹û£ºÈç¹û¶ÓÁĞ·Ç¿Õ£¬ÄÇÃ´É¾³ı¶ÓÍ·ÔªËØ£¬²¢ÓÃe·µ»ØÆäÖµ£¬º¯Êı·µ»ØSUCCESS,
+// ·ñÔòº¯Êı·µ»ØUNDER_FLOW£¬
 {
-	if (!IsEmpty()) {	// é˜Ÿåˆ—éç©º
-		e = elems[front];					// ç”¨eè¿”å›é˜Ÿå¤´å…ƒç´ 
-		front = (front + 1) % maxSize;		// frontæŒ‡å‘ä¸‹ä¸€å…ƒç´ 
+	if (!IsEmpty()) {	// ¶ÓÁĞ·Ç¿Õ
+		e = elems[front];					// ÓÃe·µ»Ø¶ÓÍ·ÔªËØ
+		front = (front + 1) % maxSize;		// frontÖ¸ÏòÏÂÒ»ÔªËØ
 		return SUCCESS;
 	}
-	else	// é˜Ÿåˆ—ä¸ºç©º
+	else	// ¶ÓÁĞÎª¿Õ
 		return UNDER_FLOW;
 }
 
 template<class ElemType>
 Status SeqQueue<ElemType>::GetHead(ElemType& e) const
-// æ“ä½œç»“æœï¼šå¦‚æœé˜Ÿåˆ—éç©ºï¼Œé‚£ä¹ˆç”¨eè¿”å›é˜Ÿå¤´å…ƒç´ ï¼Œå‡½æ•°è¿”å›SUCCESS,
-// å¦åˆ™å‡½æ•°è¿”å›UNDER_FLOWï¼Œ
+// ²Ù×÷½á¹û£ºÈç¹û¶ÓÁĞ·Ç¿Õ£¬ÄÇÃ´ÓÃe·µ»Ø¶ÓÍ·ÔªËØ£¬º¯Êı·µ»ØSUCCESS,
+// ·ñÔòº¯Êı·µ»ØUNDER_FLOW£¬
 {
-	if (!IsEmpty()) {	    // é˜Ÿåˆ—éç©º
-		e = elems[front];		// ç”¨eè¿”å›é˜Ÿå¤´å…ƒç´ 
+	if (!IsEmpty()) {	    // ¶ÓÁĞ·Ç¿Õ
+		e = elems[front];		// ÓÃe·µ»Ø¶ÓÍ·ÔªËØ
 		return SUCCESS;
 	}
 	else
@@ -128,41 +128,41 @@ Status SeqQueue<ElemType>::GetHead(ElemType& e) const
 
 template<class ElemType>
 Status SeqQueue<ElemType>::EnQueue(const ElemType e)
-// æ“ä½œç»“æœï¼šå¦‚æœé˜Ÿåˆ—å·²æ»¡ï¼Œè¿”å›OVER_FLOW,
-// å¦åˆ™æ’å…¥å…ƒç´ eä¸ºæ–°çš„é˜Ÿå°¾ï¼Œè¿”å›SUCCESS
+// ²Ù×÷½á¹û£ºÈç¹û¶ÓÁĞÒÑÂú£¬·µ»ØOVER_FLOW,
+// ·ñÔò²åÈëÔªËØeÎªĞÂµÄ¶ÓÎ²£¬·µ»ØSUCCESS
 {
 	if ((rear + 1) % maxSize == front)
 		return OVER_FLOW;
-	else {	// é˜Ÿåˆ—æœªæ»¡ï¼Œå…¥é˜ŸæˆåŠŸ
-		elems[rear] = e;					// æ’å…¥eä¸ºæ–°é˜Ÿå°¾
-		rear = (rear + 1) % maxSize;		// rearæŒ‡å‘æ–°é˜Ÿå°¾
+	else {	// ¶ÓÁĞÎ´Âú£¬Èë¶Ó³É¹¦
+		elems[rear] = e;					// ²åÈëeÎªĞÂ¶ÓÎ²
+		rear = (rear + 1) % maxSize;		// rearÖ¸ÏòĞÂ¶ÓÎ²
 		return SUCCESS;
 	}
 }
 
 template<class ElemType>
 SeqQueue<ElemType>::SeqQueue(const SeqQueue<ElemType>& q)
-// æ“ä½œç»“æœï¼šç”±é˜Ÿåˆ—qæ„é€ æ–°é˜Ÿåˆ—--å¤åˆ¶æ„é€ å‡½æ•°
+// ²Ù×÷½á¹û£ºÓÉ¶ÓÁĞq¹¹ÔìĞÂ¶ÓÁĞ--¸´ÖÆ¹¹Ôìº¯Êı
 {
-	maxSize = q.maxSize;				    // è®¾ç½®é˜Ÿåˆ—å®¹é‡
-	if (elems != NULL) delete[]elems;		// é‡Šæ”¾å­˜å‚¨ç©ºé—´
-	elems = new ElemType[maxSize];			// åˆ†é…å­˜å‚¨ç©ºé—´
-	front = q.front;						// å¤åˆ¶é˜Ÿå¤´ä½ç½®	
-	rear = q.rear;						// å¤åˆ¶é˜Ÿå°¾ä½ç½®
+	maxSize = q.maxSize;				    // ÉèÖÃ¶ÓÁĞÈİÁ¿
+	if (elems != NULL) delete[]elems;		// ÊÍ·Å´æ´¢¿Õ¼ä
+	elems = new ElemType[maxSize];			// ·ÖÅä´æ´¢¿Õ¼ä
+	front = q.front;						// ¸´ÖÆ¶ÓÍ·Î»ÖÃ	
+	rear = q.rear;						// ¸´ÖÆ¶ÓÎ²Î»ÖÃ
 	for (int i = front; i != rear; i = (i + 1) % maxSize)
 		elems[i] = q.elems[i];
 }
 
 template<class ElemType>
 SeqQueue<ElemType>& SeqQueue<ElemType>::operator =(const SeqQueue<ElemType>& q)
-// æ“ä½œç»“æœï¼šå°†é˜Ÿåˆ—qèµ‹å€¼ç»™å½“å‰é˜Ÿåˆ—--èµ‹å€¼è¯­å¥é‡è½½
+// ²Ù×÷½á¹û£º½«¶ÓÁĞq¸³Öµ¸øµ±Ç°¶ÓÁĞ--¸³ÖµÓï¾äÖØÔØ
 {
 	if (&q != this) {
-		maxSize = q.maxSize;				// è®¾ç½®é˜Ÿåˆ—å®¹é‡
-		if (elems != NULL) delete[]elems;	// é‡Šæ”¾å­˜å‚¨ç©ºé—´
-		elems = new ElemType[maxSize];		// åˆ†é…å­˜å‚¨ç©ºé—´
-		front = q.front;					// å¤åˆ¶é˜Ÿå¤´ä½ç½®	
-		rear = q.rear;					// å¤åˆ¶é˜Ÿå°¾ä½ç½®
+		maxSize = q.maxSize;				// ÉèÖÃ¶ÓÁĞÈİÁ¿
+		if (elems != NULL) delete[]elems;	// ÊÍ·Å´æ´¢¿Õ¼ä
+		elems = new ElemType[maxSize];		// ·ÖÅä´æ´¢¿Õ¼ä
+		front = q.front;					// ¸´ÖÆ¶ÓÍ·Î»ÖÃ	
+		rear = q.rear;					// ¸´ÖÆ¶ÓÎ²Î»ÖÃ
 		for (int i = front; i != rear; i = (i + 1) % maxSize)
 			elems[i] = q.elems[i];
 	}

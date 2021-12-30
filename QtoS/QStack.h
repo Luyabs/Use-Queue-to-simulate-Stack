@@ -1,37 +1,38 @@
 #pragma once
 #include "SeqQueue.h"
-#include "Assistance.h"	// è¾…åŠ©è½¯ä»¶åŒ…
+#include "Assistance.h"	// ¸¨ÖúÈí¼ş°ü
 #include <iostream>
 #include <fstream>
 #include <cmath>
 
-double gettime(int restart = 0);		
-	
+
+double gettime(int restart = 0);
+
 template<class ElemType> class QStack
 {
 public:
 	QStack();
 	virtual ~QStack();
-	int GetLength() const;							// æ±‚æ ˆçš„é•¿åº¦			 
-	bool IsEmpty(int mode = 1) const;				// åˆ¤æ–­æ ˆä¸­é˜Ÿåˆ—æ˜¯å¦ä¸ºç©º //mode = 1 ä¸¤æ¡é˜Ÿåˆ—æ˜¯å¦å…¨ç©º(æ ˆä¸ºç©º)?	mode = 2 è‡³å°‘æœ‰ä¸€æ¡é˜Ÿåˆ—ä¸ºç©º?	mode = 3 æœ‰ä¸”ä»…æœ‰ä¸€æ¡ç©ºé˜Ÿåˆ—? 
-	bool IsFull(int mode = 1) const;				// åˆ¤æ–­æ ˆä¸­é˜Ÿåˆ—æ˜¯å¦å·²æ»¡ //mode = 1 ä¸¤æ¡é˜Ÿåˆ—æ˜¯å¦å…¨æ»¡é˜Ÿ?	  mode = 2 æœ‰ä¸”ä»…æœ‰ä¸€æ¡é˜Ÿåˆ—æ»¡é˜Ÿ?
-	Status Clear();									// å°†æ ˆæ¸…ç©º
-	void Traverse(void (*Visit)(const ElemType&)) const;	// éå†æ ˆ
-	Status Push_Switch(const ElemType e);				    // å…¥æ ˆ_å·¦æ‰‹å€’å³æ‰‹ æ—¶é—´å¤æ‚åº¦O(n^2)
-	void Push_Merge(int stacklength = 0);				// stacklengthæ˜¯åŸæ¥æ ˆä¸­æœ‰åºå…ƒç´ çš„æ•°é‡	å…¥æ ˆ_å½’å¹¶å€’ç½® æ—¶é—´å¤æ‚åº¦O(nlogn)
+	int GetLength() const;							// ÇóÕ»µÄ³¤¶È			 
+	bool IsEmpty(int mode = 1) const;				// ÅĞ¶ÏÕ»ÖĞ¶ÓÁĞÊÇ·ñÎª¿Õ //mode = 1 Á½Ìõ¶ÓÁĞÊÇ·ñÈ«¿Õ(Õ»Îª¿Õ)?	mode = 2 ÖÁÉÙÓĞÒ»Ìõ¶ÓÁĞÎª¿Õ?	mode = 3 ÓĞÇÒ½öÓĞÒ»Ìõ¿Õ¶ÓÁĞ? 
+	bool IsFull(int mode = 1) const;				// ÅĞ¶ÏÕ»ÖĞ¶ÓÁĞÊÇ·ñÒÑÂú //mode = 1 Á½Ìõ¶ÓÁĞÊÇ·ñÈ«Âú¶Ó?	  mode = 2 ÓĞÇÒ½öÓĞÒ»Ìõ¶ÓÁĞÂú¶Ó?
+	Status Clear();									// ½«Õ»Çå¿Õ
+	void Traverse(void (*Visit)(const ElemType&)) const;	// ±éÀúÕ»
+	Status Push_Switch(const ElemType e);				    // ÈëÕ»_×óÊÖµ¹ÓÒÊÖ Ê±¼ä¸´ÔÓ¶ÈO(n^2)
+	void Push_Merge(int stacklength = 0);				// stacklengthÊÇÔ­À´Õ»ÖĞÓĞĞòÔªËØµÄÊıÁ¿	ÈëÕ»_¹é²¢µ¹ÖÃ Ê±¼ä¸´ÔÓ¶ÈO(nlogn)
 	void Push_Merge_Neo(int stacklength = 0);
-	Status Push_Solo(const ElemType e);						// å…¥æ ˆ_å•é˜Ÿåˆ—æ“ä½œ æ—¶é—´å¤æ‚åº¦O(n^2)
+	Status Push_Solo(const ElemType e);						// ÈëÕ»_µ¥¶ÓÁĞ²Ù×÷ Ê±¼ä¸´ÔÓ¶ÈO(n^2)
 	Status Push_Queue(const ElemType e);
-	void Push(ElemType stop, int size = 100, istream& in = cin, int choice = 1);	 // æ•´åˆç‰ˆå…¥æ ˆPush å‚æ•°åˆ†åˆ«ä¸º:ç»ˆæ­¢ç¬¦/æ•°æ®å¤§å°/è¾“å…¥æµ/choice=1æ—¶switchï¼Œ2æ—¶Merge,3æ—¶ä½¿ç”¨Merge_Neo
-	Status Top(ElemType& e) const;				    // å–é¡¶å…ƒç´ 
-	Status Pop();					    // ç®€åŒ–å‡ºæ ˆ ä¸æ¥æ”¶å¼¹å‡ºçš„å…ƒç´ 
-	Status Pop(ElemType& e);					    // å‡ºæ ˆ ç”¨eæ¥æ”¶å¼¹å‡ºçš„å…ƒç´ 
-	QStack(const QStack<ElemType>& s);		// å¤åˆ¶æ„é€ å‡½æ•°
-	QStack<ElemType>& operator =(const QStack<ElemType>& s); // èµ‹å€¼è¯­å¥é‡è½½
+	void Push(ElemType stop, int size = 100, istream& in = cin, int choice = 1);	 // ÕûºÏ°æÈëÕ»Push ²ÎÊı·Ö±ğÎª:ÖÕÖ¹·û/Êı¾İ´óĞ¡/ÊäÈëÁ÷/choice=1Ê±switch£¬2Ê±Merge,3Ê±Ê¹ÓÃMerge_Neo
+	Status Top(ElemType& e) const;				    // È¡¶¥ÔªËØ
+	Status Pop();					    // ¼ò»¯³öÕ» ²»½ÓÊÕµ¯³öµÄÔªËØ
+	Status Pop(ElemType& e);					    // ³öÕ» ÓÃe½ÓÊÕµ¯³öµÄÔªËØ
+	QStack(const QStack<ElemType>& s);		// ¸´ÖÆ¹¹Ôìº¯Êı
+	QStack<ElemType>& operator =(const QStack<ElemType>& s); // ¸³ÖµÓï¾äÖØÔØ
 
 private:
 	SeqQueue<ElemType>* q;
-	int cur;	//å½“å‰é˜Ÿåˆ— å½“ä¸€æ¡è¡¨ä¸ºç©ºæ—¶ curåº”æŒ‡å‘æœ‰æ•°æ®çš„è¡¨
+	int cur;	//µ±Ç°¶ÓÁĞ µ±Ò»Ìõ±íÎª¿ÕÊ± curÓ¦Ö¸ÏòÓĞÊı¾İµÄ±í
 	int maxsize;
 };
 
@@ -58,7 +59,7 @@ int QStack<ElemType>::GetLength() const
 }
 
 template<class ElemType>
-bool QStack<ElemType>::IsEmpty(int mode) const		//mode = 1 ä¸¤æ¡é˜Ÿåˆ—æ˜¯å¦å…¨ç©º(æ ˆä¸ºç©º)?	mode = 2 è‡³å°‘æœ‰ä¸€æ¡é˜Ÿåˆ—ä¸ºç©º?	mode = 3 æœ‰ä¸”ä»…æœ‰ä¸€æ¡ç©ºé˜Ÿåˆ—? 
+bool QStack<ElemType>::IsEmpty(int mode) const		//mode = 1 Á½Ìõ¶ÓÁĞÊÇ·ñÈ«¿Õ(Õ»Îª¿Õ)?	mode = 2 ÖÁÉÙÓĞÒ»Ìõ¶ÓÁĞÎª¿Õ?	mode = 3 ÓĞÇÒ½öÓĞÒ»Ìõ¿Õ¶ÓÁĞ? 
 {
 	bool emp1 = q[0].IsEmpty();
 	bool emp2 = q[1].IsEmpty();
@@ -77,7 +78,7 @@ bool QStack<ElemType>::IsEmpty(int mode) const		//mode = 1 ä¸¤æ¡é˜Ÿåˆ—æ˜¯å¦å…¨
 }
 
 template<class ElemType>
-bool QStack<ElemType>::IsFull(int mode) const	//mode = 1 ä¸¤æ¡é˜Ÿåˆ—æ˜¯å¦å…¨æ»¡é˜Ÿ?	mode = 2 æœ‰ä¸”ä»…æœ‰ä¸€æ¡é˜Ÿåˆ—æ»¡é˜Ÿ?   mode = 3	ä¸¤é˜Ÿé˜Ÿåˆ—éƒ½ä¸æ»¡ï¼Ÿ
+bool QStack<ElemType>::IsFull(int mode) const	//mode = 1 Á½Ìõ¶ÓÁĞÊÇ·ñÈ«Âú¶Ó?	mode = 2 ÓĞÇÒ½öÓĞÒ»Ìõ¶ÓÁĞÂú¶Ó?   mode = 3	Á½¶Ó¶ÓÁĞ¶¼²»Âú£¿
 {
 	bool emp1 = q[0].IsFull();
 	bool emp2 = q[1].IsFull();
@@ -123,13 +124,13 @@ void QStack<ElemType>::Traverse(void (*Visit)(const ElemType&)) const
 }
 
 template<class ElemType>
-Status QStack<ElemType>::Push_Solo(const ElemType e)			// å…¥æ ˆ_å•é˜Ÿåˆ—æ“ä½œ 
+Status QStack<ElemType>::Push_Solo(const ElemType e)			// ÈëÕ»_µ¥¶ÓÁĞ²Ù×÷ 
 {
-	if (IsFull(1))												//å…¨æ»¡ å¼‚å¸¸å¤„ç†
+	if (IsFull(1))												//È«Âú Òì³£´¦Àí
 		return Status();
-	else if (q[cur].IsFull())									//å½“å‰é˜Ÿåˆ—å·²æ»¡ æ¢åˆ—
+	else if (q[cur].IsFull())									//µ±Ç°¶ÓÁĞÒÑÂú »»ÁĞ
 		cur = 1 - cur;
-	if (q[cur].IsEmpty())										//åˆ—ä¸ºç©º ç›´æ¥æ’å…¥
+	if (q[cur].IsEmpty())										//ÁĞÎª¿Õ Ö±½Ó²åÈë
 	{
 		q[cur].EnQueue(e);
 		return SUCCESS;
@@ -138,7 +139,7 @@ Status QStack<ElemType>::Push_Solo(const ElemType e)			// å…¥æ ˆ_å•é˜Ÿåˆ—æ“ä½œ
 	if (L <= q[cur].maxSize)
 	{
 		ElemType t;
-		q[cur].DelQueue(t);										//å…ˆåˆ é™¤åæ’å…¥
+		q[cur].DelQueue(t);										//ÏÈÉ¾³ıºó²åÈë
 		q[cur].EnQueue(e);
 		for (int i = 0; i < L - 1; i++)
 		{
@@ -155,11 +156,11 @@ Status QStack<ElemType>::Push_Solo(const ElemType e)			// å…¥æ ˆ_å•é˜Ÿåˆ—æ“ä½œ
 }
 
 template<class ElemType>
-Status QStack<ElemType>::Push_Queue(const ElemType e)							//å…¥é˜Ÿåˆ—
+Status QStack<ElemType>::Push_Queue(const ElemType e)							//Èë¶ÓÁĞ
 {
-	if (IsFull(1))												//å…¨æ»¡ å¼‚å¸¸å¤„ç†
+	if (IsFull(1))												//È«Âú Òì³£´¦Àí
 		return Status();
-	else if (q[cur].IsFull())									//å½“å‰é˜Ÿåˆ—å·²æ»¡ æ¢åˆ—
+	else if (q[cur].IsFull())									//µ±Ç°¶ÓÁĞÒÑÂú »»ÁĞ
 		cur = 1 - cur;
 	q[cur].EnQueue(e);
 	return SUCCESS;
@@ -188,27 +189,27 @@ Status QStack<ElemType>::Push_Switch(const ElemType e)
 }
 
 template<class ElemType>
-void QStack<ElemType>::Push_Merge(int stacklength)				// stacklengthæ˜¯åŸæ¥æ ˆä¸­æœ‰åºå…ƒç´ çš„æ•°é‡	å…¥æ ˆ_å½’å¹¶å€’ç½® æ—¶é—´å¤æ‚åº¦O(nlogn)
-{	//å¿…é¡»è¦å»stacklengthä¸å‡ºé”™
-	ElemType e;			//ç”¨äºæ¥æ”¶ä¸€æ¬¡å¼¹å‡ºæ•°æ®
-	int length = q[cur].GetLength() - stacklength;	//éœ€è¦å½’å¹¶å€’ç½®çš„å…ƒç´ æ•°é‡
+void QStack<ElemType>::Push_Merge(int stacklength)				// stacklengthÊÇÔ­À´Õ»ÖĞÓĞĞòÔªËØµÄÊıÁ¿	ÈëÕ»_¹é²¢µ¹ÖÃ Ê±¼ä¸´ÔÓ¶ÈO(nlogn)
+{	//±ØĞëÒªÈ¥stacklength²»³ö´í
+	ElemType e;			//ÓÃÓÚ½ÓÊÕÒ»´Îµ¯³öÊı¾İ
+	int length = q[cur].GetLength() - stacklength;	//ĞèÒª¹é²¢µ¹ÖÃµÄÔªËØÊıÁ¿
 	int count;
-	int templength;			//templengthä¸ºå®é™…éœ€è¦è¡¥é½çš„æ•°é‡
+	int templength;			//templengthÎªÊµ¼ÊĞèÒª²¹ÆëµÄÊıÁ¿
 	int c = 1;
-	ElemType blank;			//å¡«è¡¥ç©ºä½çš„å…ƒç´  ç”¨æ¥å¤„ç†é2^nä¸ªæ–°å¢æ•°æ®çš„æƒ…å†µ
-	Top(blank);				//blankå¿…é¡»è¿›è¡Œåˆå§‹åŒ–
+	ElemType blank;			//Ìî²¹¿ÕÎ»µÄÔªËØ ÓÃÀ´´¦Àí·Ç2^n¸öĞÂÔöÊı¾İµÄÇé¿ö
+	Top(blank);				//blank±ØĞë½øĞĞ³õÊ¼»¯
 	int sort_num = 1;
 	int batch2 = 1;
 	for (; sort_num * 2 <= length; sort_num *= 2);
 	int unsort_num = length - sort_num;
-	for (; batch2 < length-sort_num; batch2 *= 2);
+	for (; batch2 < length - sort_num; batch2 *= 2);
 	templength = batch2 - unsort_num;
 	if (sort_num == length)
 	{
 		templength = 0;
 		batch2 = 0;
 	}
-	for (int j = 0; j < templength; j++)		//è¡¥é½é˜Ÿåˆ—ä¸ºiçš„å€æ•°  åŠ¡å¿…ç¡®ä¿maxsizeæ˜¯å¯ä»¥è¡¨è¾¾ä¸º2^mçš„æ•´æ•° 
+	for (int j = 0; j < templength; j++)		//²¹Æë¶ÓÁĞÎªiµÄ±¶Êı  Îñ±ØÈ·±£maxsizeÊÇ¿ÉÒÔ±í´ïÎª2^mµÄÕûÊı 
 	{
 		q[cur].EnQueue(blank);
 	}
@@ -216,13 +217,13 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklengthæ˜¯åŸæ¥æ ˆ
 	c = batch2;
 	for (int i = 2; i <= length; i *= 2)
 	{
-		cout << "i:" << i << endl;
-		cout << "tem:" << templength << endl;
+		//cout << "i:" << i << endl;
+		//cout << "tem:" << templength << endl;
 
 		count /= 2; 	//q[cur].Traverse(Write<double>);	cout << endl;
 		c /= 2;
 
-		for (int j = 0; j < stacklength; j++)		//è®©"æ ˆ"ä¸­åŸæ¥çš„å…ƒç´ (å­˜åœ¨ä¸€æ¡é˜Ÿåˆ—ä¸­)å›åˆ°é˜Ÿåˆ—çš„å°¾
+		for (int j = 0; j < stacklength; j++)		//ÈÃ"Õ»"ÖĞÔ­À´µÄÔªËØ(´æÔÚÒ»Ìõ¶ÓÁĞÖĞ)»Øµ½¶ÓÁĞµÄÎ²
 		{
 			q[cur].DelQueue(e);
 			q[cur].EnQueue(e);
@@ -233,38 +234,38 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklengthæ˜¯åŸæ¥æ ˆ
 		{
 			for (int j = 0; j < count; j++)
 			{
-				for (int k = 0; k < i; k++)		//è®©æ‰€æœ‰æ–°å¢çš„å…ƒç´ ä»¥2^kä¸ªä¸€ç»„ï¼ŒæŒªåˆ°å¦ä¸€ä¸ªç©ºè¡¨
+				for (int k = 0; k < i; k++)		//ÈÃËùÓĞĞÂÔöµÄÔªËØÒÔ2^k¸öÒ»×é£¬Å²µ½ÁíÒ»¸ö¿Õ±í
 				{
 					q[cur].DelQueue(e);
-					q[1 - cur].EnQueue(e);  //cout << "å‡ºé˜Ÿåˆ—: ";   q[cur].Traverse(Write<double>);	cout << endl;
+					q[1 - cur].EnQueue(e);  //cout << "³ö¶ÓÁĞ: ";   q[cur].Traverse(Write<double>);	cout << endl;
 				}
-				for (int k = 0; k < i / 2; k++)	//åœ¨ç©ºè¡¨ä½œé€†åº
+				for (int k = 0; k < i / 2; k++)	//ÔÚ¿Õ±í×÷ÄæĞò
 				{
 					q[1 - cur].DelQueue(e);
 					q[1 - cur].EnQueue(e);
 				}
-				for (int k = 0; k < i; k++)		//é€†åºå®Œå›åˆ°åŸæ¥çš„è¡¨
+				for (int k = 0; k < i; k++)		//ÄæĞòÍê»Øµ½Ô­À´µÄ±í
 				{
 					q[1 - cur].DelQueue(e);
-					q[cur].EnQueue(e);  //cout << "å›é˜Ÿåˆ—: ";  q[cur].Traverse(Write<double>);	cout << endl;
+					q[cur].EnQueue(e);  //cout << "»Ø¶ÓÁĞ: ";  q[cur].Traverse(Write<double>);	cout << endl;
 				}
 			}
 			for (int j = 0; j < c; j++)
 			{
-				for (int k = 0; k < i; k++)		//è®©æ‰€æœ‰æ–°å¢çš„å…ƒç´ ä»¥2^kä¸ªä¸€ç»„ï¼ŒæŒªåˆ°å¦ä¸€ä¸ªç©ºè¡¨
+				for (int k = 0; k < i; k++)		//ÈÃËùÓĞĞÂÔöµÄÔªËØÒÔ2^k¸öÒ»×é£¬Å²µ½ÁíÒ»¸ö¿Õ±í
 				{
 					q[cur].DelQueue(e);
-					q[1 - cur].EnQueue(e);  //cout << "å‡ºé˜Ÿåˆ—: ";   q[cur].Traverse(Write<double>);	cout << endl;
+					q[1 - cur].EnQueue(e);  //cout << "³ö¶ÓÁĞ: ";   q[cur].Traverse(Write<double>);	cout << endl;
 				}
-				for (int k = 0; k < i / 2; k++)	//åœ¨ç©ºè¡¨ä½œé€†åº
+				for (int k = 0; k < i / 2; k++)	//ÔÚ¿Õ±í×÷ÄæĞò
 				{
 					q[1 - cur].DelQueue(e);
 					q[1 - cur].EnQueue(e);
 				}
-				for (int k = 0; k < i; k++)		//é€†åºå®Œå›åˆ°åŸæ¥çš„è¡¨
+				for (int k = 0; k < i; k++)		//ÄæĞòÍê»Øµ½Ô­À´µÄ±í
 				{
 					q[1 - cur].DelQueue(e);
-					q[cur].EnQueue(e);  //cout << "å›é˜Ÿåˆ—: ";  q[cur].Traverse(Write<double>);	cout << endl;
+					q[cur].EnQueue(e);  //cout << "»Ø¶ÓÁĞ: ";  q[cur].Traverse(Write<double>);	cout << endl;
 				}
 			}
 		}
@@ -272,20 +273,20 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklengthæ˜¯åŸæ¥æ ˆ
 		{
 			for (int j = 0; j < count; j++)
 			{
-				for (int k = 0; k < i; k++)		//è®©æ‰€æœ‰æ–°å¢çš„å…ƒç´ ä»¥2^kä¸ªä¸€ç»„ï¼ŒæŒªåˆ°å¦ä¸€ä¸ªç©ºè¡¨
+				for (int k = 0; k < i; k++)		//ÈÃËùÓĞĞÂÔöµÄÔªËØÒÔ2^k¸öÒ»×é£¬Å²µ½ÁíÒ»¸ö¿Õ±í
 				{
 					q[cur].DelQueue(e);
-					q[1 - cur].EnQueue(e);  //cout << "å‡ºé˜Ÿåˆ—: ";   q[cur].Traverse(Write<double>);	cout << endl;
+					q[1 - cur].EnQueue(e);  //cout << "³ö¶ÓÁĞ: ";   q[cur].Traverse(Write<double>);	cout << endl;
 				}
-				for (int k = 0; k < i / 2; k++)	//åœ¨ç©ºè¡¨ä½œé€†åº
+				for (int k = 0; k < i / 2; k++)	//ÔÚ¿Õ±í×÷ÄæĞò
 				{
 					q[1 - cur].DelQueue(e);
 					q[1 - cur].EnQueue(e);
 				}
-				for (int k = 0; k < i; k++)		//é€†åºå®Œå›åˆ°åŸæ¥çš„è¡¨
+				for (int k = 0; k < i; k++)		//ÄæĞòÍê»Øµ½Ô­À´µÄ±í
 				{
 					q[1 - cur].DelQueue(e);
-					q[cur].EnQueue(e);  //cout << "å›é˜Ÿåˆ—: ";  q[cur].Traverse(Write<double>);	cout << endl;
+					q[cur].EnQueue(e);  //cout << "»Ø¶ÓÁĞ: ";  q[cur].Traverse(Write<double>);	cout << endl;
 				}
 			}
 			for (int j = 0; j < batch2; j++)
@@ -294,110 +295,15 @@ void QStack<ElemType>::Push_Merge(int stacklength)				// stacklengthæ˜¯åŸæ¥æ ˆ
 				q[cur].EnQueue(e);
 			}
 		}
-		
-		
-		//cout << "å½“å‰è½®æ¬¡: ";
+
+
+		//cout << "µ±Ç°ÂÖ´Î: ";
 		//q[cur].Traverse(Write<double>);	cout << endl;
 		//cout << "LOOP" << endl;
 	}
 	if (batch2 != 0)
 	{
-		for (int i = 0; i < stacklength; i++)		//è®©"æ ˆ"ä¸­åŸæ¥çš„å…ƒç´ (å­˜åœ¨ä¸€æ¡é˜Ÿåˆ—ä¸­)å›åˆ°é˜Ÿåˆ—çš„å°¾
-		{
-			q[cur].DelQueue(e);
-			q[1-cur].EnQueue(e);
-		}
-		for (int i = 0; i < sort_num; i++)
-		{
-			q[cur].DelQueue(e);
-			q[cur].EnQueue(e);
-		}
-		for (int i = 0; i < stacklength; i++)		//è®©"æ ˆ"ä¸­åŸæ¥çš„å…ƒç´ (å­˜åœ¨ä¸€æ¡é˜Ÿåˆ—ä¸­)å›åˆ°é˜Ÿåˆ—çš„å°¾
-		{
-			q[1 - cur].DelQueue(e);
-			q[cur].EnQueue(e);
-		}
-	}
-	for (int i = 0; i < templength; i++)
-	{
-		q[cur].DelQueue(e);
-	}
-	for (int i = 0; i < stacklength && batch2 == 0; i++)		//è®©"æ ˆ"ä¸­åŸæ¥çš„å…ƒç´ (å­˜åœ¨ä¸€æ¡é˜Ÿåˆ—ä¸­)å›åˆ°é˜Ÿåˆ—çš„å°¾
-	{
-		q[cur].DelQueue(e);
-		q[cur].EnQueue(e);
-	}
-}
-
-template<class ElemType>
-void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklengthæ˜¯åŸæ¥æ ˆä¸­æœ‰åºå…ƒç´ çš„æ•°é‡	å…¥æ ˆ_å½’å¹¶å€’ç½® æ—¶é—´å¤æ‚åº¦O(nlogn)
-{	//å¿…é¡»è¦å»stacklengthä¸å‡ºé”™
-	ElemType e;			//ç”¨äºæ¥æ”¶ä¸€æ¬¡å¼¹å‡ºæ•°æ®
-	int length = q[cur].GetLength() - stacklength;	//éœ€è¦å½’å¹¶å€’ç½®çš„å…ƒç´ æ•°é‡
-	int count = length;
-	int templength;			//templengthä¸ºå®é™…éœ€è¦è¡¥é½çš„æ•°é‡
-	int sort_num = 1;
-	ElemType blank;			//å¡«è¡¥ç©ºä½çš„å…ƒç´  ç”¨æ¥å¤„ç†é2^nä¸ªæ–°å¢æ•°æ®çš„æƒ…å†µ
-	Top(blank);				//blankå¿…é¡»è¿›è¡Œåˆå§‹åŒ–
-
-	if (length <= 1)return;
-	for (; sort_num * 2 <= length; sort_num *= 2);
-	count = sort_num / 2;
-
-	for (int i = 2; i/2 < length && count > 0; i *= 2)
-	{
-		templength = i - length % i;
-
-
-		//q[cur].Traverse(Write<double>);	cout << endl;
-
-		for (int j = 0; j < stacklength; j++)		//è®©"æ ˆ"ä¸­åŸæ¥çš„å…ƒç´ (å­˜åœ¨ä¸€æ¡é˜Ÿåˆ—ä¸­)å›åˆ°é˜Ÿåˆ—çš„å°¾
-		{
-			//cout << "åŸæœ‰å…ƒç´ æ’é˜Ÿå°¾" << endl;
-			q[cur].DelQueue(e);
-			q[cur].EnQueue(e);
-		}
-		//cout << i << endl;
-		//cout << count << endl;
-		for (int j = 0; j < count; j++)
-		{
-			for (int k = 0; k < i; k++)		//è®©æ‰€æœ‰æ–°å¢çš„å…ƒç´ ä»¥2^kä¸ªä¸€ç»„ï¼ŒæŒªåˆ°å¦ä¸€ä¸ªç©ºè¡¨
-			{
-				q[cur].DelQueue(e);
-				q[1 - cur].EnQueue(e);  //cout << "å‡ºé˜Ÿåˆ—: ";   //q[cur].Traverse(Write<double>);	cout << endl;
-			}
-			for (int k = 0; k < i / 2; k++)	//åœ¨ç©ºè¡¨ä½œé€†åº
-			{
-				q[1 - cur].DelQueue(e);
-				q[1 - cur].EnQueue(e);
-			}
-			for (int k = 0; k < i; k++)		//é€†åºå®Œå›åˆ°åŸæ¥çš„è¡¨
-			{
-				q[1 - cur].DelQueue(e);
-				q[cur].EnQueue(e);  //cout << "å›é˜Ÿåˆ—: ";  //q[cur].Traverse(Write<double>);	cout << endl;
-			}
-		}
-		
-		if (length - sort_num != 0)		
-		{
-			for (int j = 0; j < length - sort_num; j++)
-			{
-				q[cur].DelQueue(e);
-				q[cur].EnQueue(e);
-				//cout << "æ’é˜Ÿå°¾: ";
-				//q[cur].Traverse(Write<double>);	cout << endl;
-			}
-		}
-
-		count /= 2;
-
-		//cout << "å½“å‰è½®æ¬¡: ";
-		//q[cur].Traverse(Write<double>);	cout << endl;
-		//cout << "LOOP" << endl;
-	}
-	if (length - sort_num == 1)
-	{
-		for (int i = 0; i < stacklength; i++)		//è®©"æ ˆ"ä¸­åŸæ¥çš„å…ƒç´ (å­˜åœ¨ä¸€æ¡é˜Ÿåˆ—ä¸­)å›åˆ°é˜Ÿåˆ—çš„å°¾
+		for (int i = 0; i < stacklength; i++)		//ÈÃ"Õ»"ÖĞÔ­À´µÄÔªËØ(´æÔÚÒ»Ìõ¶ÓÁĞÖĞ)»Øµ½¶ÓÁĞµÄÎ²
 		{
 			q[cur].DelQueue(e);
 			q[1 - cur].EnQueue(e);
@@ -407,7 +313,102 @@ void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklengthæ˜¯åŸæ
 			q[cur].DelQueue(e);
 			q[cur].EnQueue(e);
 		}
-		for (int i = 0; i < stacklength; i++)		//è®©"æ ˆ"ä¸­åŸæ¥çš„å…ƒç´ (å­˜åœ¨ä¸€æ¡é˜Ÿåˆ—ä¸­)å›åˆ°é˜Ÿåˆ—çš„å°¾
+		for (int i = 0; i < stacklength; i++)		//ÈÃ"Õ»"ÖĞÔ­À´µÄÔªËØ(´æÔÚÒ»Ìõ¶ÓÁĞÖĞ)»Øµ½¶ÓÁĞµÄÎ²
+		{
+			q[1 - cur].DelQueue(e);
+			q[cur].EnQueue(e);
+		}
+	}
+	for (int i = 0; i < templength; i++)
+	{
+		q[cur].DelQueue(e);
+	}
+	for (int i = 0; i < stacklength && batch2 == 0; i++)		//ÈÃ"Õ»"ÖĞÔ­À´µÄÔªËØ(´æÔÚÒ»Ìõ¶ÓÁĞÖĞ)»Øµ½¶ÓÁĞµÄÎ²
+	{
+		q[cur].DelQueue(e);
+		q[cur].EnQueue(e);
+	}
+}
+
+template<class ElemType>
+void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklengthÊÇÔ­À´Õ»ÖĞÓĞĞòÔªËØµÄÊıÁ¿	ÈëÕ»_¹é²¢µ¹ÖÃ Ê±¼ä¸´ÔÓ¶ÈO(nlogn)
+{	//±ØĞëÒªÈ¥stacklength²»³ö´í
+	ElemType e;			//ÓÃÓÚ½ÓÊÕÒ»´Îµ¯³öÊı¾İ
+	int length = q[cur].GetLength() - stacklength;	//ĞèÒª¹é²¢µ¹ÖÃµÄÔªËØÊıÁ¿
+	int count = length;
+	int templength;			//templengthÎªÊµ¼ÊĞèÒª²¹ÆëµÄÊıÁ¿
+	int sort_num = 1;
+	ElemType blank;			//Ìî²¹¿ÕÎ»µÄÔªËØ ÓÃÀ´´¦Àí·Ç2^n¸öĞÂÔöÊı¾İµÄÇé¿ö
+	Top(blank);				//blank±ØĞë½øĞĞ³õÊ¼»¯
+
+	if (length <= 1)return;
+	for (; sort_num * 2 <= length; sort_num *= 2);
+	count = sort_num / 2;
+
+	for (int i = 2; i / 2 < length && count > 0; i *= 2)
+	{
+		templength = i - length % i;
+
+
+		//q[cur].Traverse(Write<double>);	cout << endl;
+
+		for (int j = 0; j < stacklength; j++)		//ÈÃ"Õ»"ÖĞÔ­À´µÄÔªËØ(´æÔÚÒ»Ìõ¶ÓÁĞÖĞ)»Øµ½¶ÓÁĞµÄÎ²
+		{
+			//cout << "Ô­ÓĞÔªËØÅÅ¶ÓÎ²" << endl;
+			q[cur].DelQueue(e);
+			q[cur].EnQueue(e);
+		}
+		//cout << i << endl;
+		//cout << count << endl;
+		for (int j = 0; j < count; j++)
+		{
+			for (int k = 0; k < i; k++)		//ÈÃËùÓĞĞÂÔöµÄÔªËØÒÔ2^k¸öÒ»×é£¬Å²µ½ÁíÒ»¸ö¿Õ±í
+			{
+				q[cur].DelQueue(e);
+				q[1 - cur].EnQueue(e);  //cout << "³ö¶ÓÁĞ: ";   //q[cur].Traverse(Write<double>);	cout << endl;
+			}
+			for (int k = 0; k < i / 2; k++)	//ÔÚ¿Õ±í×÷ÄæĞò
+			{
+				q[1 - cur].DelQueue(e);
+				q[1 - cur].EnQueue(e);
+			}
+			for (int k = 0; k < i; k++)		//ÄæĞòÍê»Øµ½Ô­À´µÄ±í
+			{
+				q[1 - cur].DelQueue(e);
+				q[cur].EnQueue(e);  //cout << "»Ø¶ÓÁĞ: ";  //q[cur].Traverse(Write<double>);	cout << endl;
+			}
+		}
+
+		if (length - sort_num != 0)
+		{
+			for (int j = 0; j < length - sort_num; j++)
+			{
+				q[cur].DelQueue(e);
+				q[cur].EnQueue(e);
+				//cout << "ÅÅ¶ÓÎ²: ";
+				//q[cur].Traverse(Write<double>);	cout << endl;
+			}
+		}
+
+		count /= 2;
+
+		//cout << "µ±Ç°ÂÖ´Î: ";
+		//q[cur].Traverse(Write<double>);	cout << endl;
+		//cout << "LOOP" << endl;
+	}
+	if (length - sort_num == 1)
+	{
+		for (int i = 0; i < stacklength; i++)		//ÈÃ"Õ»"ÖĞÔ­À´µÄÔªËØ(´æÔÚÒ»Ìõ¶ÓÁĞÖĞ)»Øµ½¶ÓÁĞµÄÎ²
+		{
+			q[cur].DelQueue(e);
+			q[1 - cur].EnQueue(e);
+		}
+		for (int i = 0; i < sort_num; i++)
+		{
+			q[cur].DelQueue(e);
+			q[cur].EnQueue(e);
+		}
+		for (int i = 0; i < stacklength; i++)		//ÈÃ"Õ»"ÖĞÔ­À´µÄÔªËØ(´æÔÚÒ»Ìõ¶ÓÁĞÖĞ)»Øµ½¶ÓÁĞµÄÎ²
 		{
 			q[1 - cur].DelQueue(e);
 			q[cur].EnQueue(e);
@@ -415,7 +416,7 @@ void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklengthæ˜¯åŸæ
 	}
 	else
 	{
-		for (int i = 0; i < stacklength; i++)		//è®©"æ ˆ"ä¸­åŸæ¥çš„å…ƒç´ (å­˜åœ¨ä¸€æ¡é˜Ÿåˆ—ä¸­)å›åˆ°é˜Ÿåˆ—çš„å°¾
+		for (int i = 0; i < stacklength; i++)		//ÈÃ"Õ»"ÖĞÔ­À´µÄÔªËØ(´æÔÚÒ»Ìõ¶ÓÁĞÖĞ)»Øµ½¶ÓÁĞµÄÎ²
 		{
 			q[cur].DelQueue(e);
 			q[cur].EnQueue(e);
@@ -430,7 +431,7 @@ void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklengthæ˜¯åŸæ
 			q[cur].DelQueue(e);
 			q[cur].EnQueue(e);
 		}
-		for (int i = 0; i < stacklength; i++)		//è®©"æ ˆ"ä¸­åŸæ¥çš„å…ƒç´ (å­˜åœ¨ä¸€æ¡é˜Ÿåˆ—ä¸­)å›åˆ°é˜Ÿåˆ—çš„å°¾
+		for (int i = 0; i < stacklength; i++)		//ÈÃ"Õ»"ÖĞÔ­À´µÄÔªËØ(´æÔÚÒ»Ìõ¶ÓÁĞÖĞ)»Øµ½¶ÓÁĞµÄÎ²
 		{
 			q[cur].DelQueue(e);
 			q[1 - cur].EnQueue(e);
@@ -442,7 +443,7 @@ void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklengthæ˜¯åŸæ
 		}
 		cur = 1 - cur;
 	}
-	
+
 	//cout << "finish" << endl;
 	Push_Merge_Neo(stacklength + sort_num);
 }
@@ -451,12 +452,12 @@ void QStack<ElemType>::Push_Merge_Neo(int stacklength)				// stacklengthæ˜¯åŸæ
 template<class ElemType>
 void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 {
-	ElemType buffer;		//è¾“å…¥æµç¼“
+	ElemType buffer;		//ÊäÈëÁ÷»º
 	ElemType* e = new ElemType[size];
 	int length;
-	//int edge = 10;		//ï¼ï¼ï¼æ­¤å¤„éœ€è¦é€šè¿‡åˆ†ææ•°æ®æ‰¾åˆ°åˆé€‚çš„æ•°å­—ï¼Œæš‚å®š2048  if else çš„åˆ¤å®šæ¡ä»¶ä¹Ÿåº”è¯¥æ›´å¤æ‚ éœ€è¦è€ƒè™‘"æ ˆ"ä¸­åŸæ¥æœ‰å¤šå°‘å…ƒç´ (éœ€æ·»åŠ å‡½æ•°ä¸­çš„ä¸´æ—¶å˜é‡)
+	//int edge = 10;		//£¡£¡£¡´Ë´¦ĞèÒªÍ¨¹ı·ÖÎöÊı¾İÕÒµ½ºÏÊÊµÄÊı×Ö£¬Ôİ¶¨2048  if else µÄÅĞ¶¨Ìõ¼şÒ²Ó¦¸Ã¸ü¸´ÔÓ ĞèÒª¿¼ÂÇ"Õ»"ÖĞÔ­À´ÓĞ¶àÉÙÔªËØ(ĞèÌí¼Óº¯ÊıÖĞµÄÁÙÊ±±äÁ¿)
 	int process = 1;
-	int stack_length = GetLength();		//"æ ˆ"ä¸­åŸæ¥æœ‰å¤šå°‘æ•°æ®
+	int stack_length = GetLength();		//"Õ»"ÖĞÔ­À´ÓĞ¶àÉÙÊı¾İ
 
 	for (length = 0; length < size; length++)
 	{
@@ -467,13 +468,13 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 	}
 	if (choice == 1)
 	{
-		cout << "æ­£åœ¨è°ƒç”¨Push_Switch:" << endl;
+		//cout << "ÕıÔÚµ÷ÓÃPush_Switch:" << endl;
 		for (int i = 0; i < length; i++)
 		{
 			switch (process)
 			{
 			case 1:
-				if (IsFull(3))		//å½“å‰ä¸¤æ¡é˜Ÿåˆ—ä¸æ»¡
+				if (IsFull(3))		//µ±Ç°Á½Ìõ¶ÓÁĞ²»Âú
 				{
 					Push_Switch(e[i]);
 				}
@@ -484,9 +485,9 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 				}
 				break;
 			case 2:
-				if (IsFull(1) == 0)		//æœ‰ä¸€æ¡é˜Ÿåˆ—å·²æ»¡ è°ƒç”¨å•é˜Ÿåˆ—ä½œæ ˆæ³•
+				if (IsFull(1) == 0)		//ÓĞÒ»Ìõ¶ÓÁĞÒÑÂú µ÷ÓÃµ¥¶ÓÁĞ×÷Õ»·¨
 				{
-					cout << "push_solo" << endl;
+					//cout << "push_solo" << endl;
 					Push_Solo(e[i]);
 				}
 				break;
@@ -497,30 +498,30 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 	}
 	else if (choice == 2)
 	{
-		cout << "æ­£åœ¨è°ƒç”¨Push_Merge:" << endl;
+		//cout << "ÕıÔÚµ÷ÓÃPush_Merge:" << endl;
 		for (int i = 0; i < length; i++)
 		{
 			switch (process)
 			{
 			case 1:
-				if (IsFull(3) && (i+stack_length+1)<=(DEFAULT_SIZE/2))		//å½“å‰ä¸¤æ¡é˜Ÿåˆ—ä¸æ»¡
-					q[cur].EnQueue(e[i]);	//å°†æ•°æ®å…¨æ’è¿›å»
+				if (IsFull(3) && (i + stack_length + 1) <= (DEFAULT_SIZE / 2))		//µ±Ç°Á½Ìõ¶ÓÁĞ²»Âú
+					q[cur].EnQueue(e[i]);	//½«Êı¾İÈ«²å½øÈ¥
 				else
 				{
 					process = 2;
-					Push_Merge(stack_length);	//å¡«æ»¡å°±å½’å¹¶å€’ç½®
+					Push_Merge(stack_length);	//ÌîÂú¾Í¹é²¢µ¹ÖÃ
 					cur = 1 - cur;
 					i--;
 				}
 				if (i == length - 1)
 				{
-					Push_Merge(stack_length);	//æ²¡æœ‰è¦pushçš„å…ƒç´ å°±å½’å¹¶å€’ç½®
+					Push_Merge(stack_length);	//Ã»ÓĞÒªpushµÄÔªËØ¾Í¹é²¢µ¹ÖÃ
 				}
 				break;
 			case 2:
-				if (IsFull(1) == 0)		//æœ‰ä¸€æ¡é˜Ÿåˆ—å·²æ»¡ è°ƒç”¨å•é˜Ÿåˆ—ä½œæ ˆæ³•
+				if (IsFull(1) == 0)		//ÓĞÒ»Ìõ¶ÓÁĞÒÑÂú µ÷ÓÃµ¥¶ÓÁĞ×÷Õ»·¨
 				{
-					cout << "push_solo" << endl;
+					//cout << "push_solo" << endl;
 					Push_Solo(e[i]);
 				}
 				break;
@@ -531,31 +532,31 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 
 		}
 	}
-	else if(choice == 3)
+	else if (choice == 3)
 	{
-		cout << "æ­£åœ¨è°ƒç”¨Push_Merge_Neo:" << endl;
+		//cout << "ÕıÔÚµ÷ÓÃPush_Merge_Neo:" << endl;
 		for (int i = 0; i < length; i++)
 		{
 			switch (process)
 			{
 			case 1:
-				if (IsFull(3))		//å½“å‰ä¸¤æ¡é˜Ÿåˆ—ä¸æ»¡
-					q[cur].EnQueue(e[i]);	//å°†æ•°æ®å…¨æ’è¿›å»
+				if (IsFull(3))		//µ±Ç°Á½Ìõ¶ÓÁĞ²»Âú
+					q[cur].EnQueue(e[i]);	//½«Êı¾İÈ«²å½øÈ¥
 				else
 				{
 					process = 2;
-					Push_Merge_Neo(stack_length);	//å¡«æ»¡å°±å½’å¹¶å€’ç½®
+					Push_Merge_Neo(stack_length);	//ÌîÂú¾Í¹é²¢µ¹ÖÃ
 					cur = 1 - cur;
 				}
 				if (i == length - 1)
 				{
-					Push_Merge_Neo(stack_length);	//æ²¡æœ‰è¦pushçš„å…ƒç´ å°±å½’å¹¶å€’ç½®
+					Push_Merge_Neo(stack_length);	//Ã»ÓĞÒªpushµÄÔªËØ¾Í¹é²¢µ¹ÖÃ
 				}
 				break;
 			case 2:
-				if (IsFull(1) == 0)		//æœ‰ä¸€æ¡é˜Ÿåˆ—å·²æ»¡ è°ƒç”¨å•é˜Ÿåˆ—ä½œæ ˆæ³•
+				if (IsFull(1) == 0)		//ÓĞÒ»Ìõ¶ÓÁĞÒÑÂú µ÷ÓÃµ¥¶ÓÁĞ×÷Õ»·¨
 				{
-					cout << "push_solo" << endl;
+					//cout << "push_solo" << endl;
 					Push_Solo(e[i]);
 				}
 				break;
@@ -572,16 +573,16 @@ void QStack<ElemType>::Push(ElemType stop, int size, istream& in, int choice)
 template<class ElemType>
 Status QStack<ElemType>::Top(ElemType& e) const
 {
-	if (IsEmpty(1))	 // æ ˆç©º
+	if (IsEmpty(1))	 // Õ»¿Õ
 		return UNDER_FLOW;
-	else { // æ ˆéç©º,æ“ä½œæˆåŠŸ
-		q[cur].GetHead(e);	// ç”¨eè¿”å›æ ˆé¡¶å…ƒç´ 
+	else { // Õ»·Ç¿Õ,²Ù×÷³É¹¦
+		q[cur].GetHead(e);	// ÓÃe·µ»ØÕ»¶¥ÔªËØ
 		return SUCCESS;
 	}
 }
 
 template<class ElemType>
-Status QStack<ElemType>::Pop()		//ä¸å¼¹å‡º"æ ˆ"é¡¶å…ƒç´ 
+Status QStack<ElemType>::Pop()		//²»µ¯³ö"Õ»"¶¥ÔªËØ
 {
 	if (IsEmpty(1))
 		return UNDER_FLOW;
@@ -593,7 +594,7 @@ Status QStack<ElemType>::Pop()		//ä¸å¼¹å‡º"æ ˆ"é¡¶å…ƒç´ 
 }
 
 template<class ElemType>
-Status QStack<ElemType>::Pop(ElemType& e)		//å¼¹å‡º"æ ˆ"é¡¶å…ƒç´ 
+Status QStack<ElemType>::Pop(ElemType& e)		//µ¯³ö"Õ»"¶¥ÔªËØ
 {
 	if (IsEmpty(1))
 		return UNDER_FLOW;
@@ -630,11 +631,10 @@ QStack<ElemType>& QStack<ElemType>::operator =(const QStack<ElemType>& s)
 	return *this;
 }
 
-double gettime(int restart)					// å‚æ•°å¸¦é»˜è®¤å€¼ï¼Œéé›¶è¡¨ç¤ºé‡æ–°è®¡æ—¶
-{											// å¦åˆ™ç´¯è®¡è®¡æ—¶
+double gettime(int restart)					// ²ÎÊı´øÄ¬ÈÏÖµ£¬·ÇÁã±íÊ¾ÖØĞÂ¼ÆÊ±
+{											// ·ñÔòÀÛ¼Æ¼ÆÊ±
 	const double c = 1.0 / CLOCKS_PER_SEC;
-	static double t = double(clock());				// é™æ€å±€éƒ¨å˜é‡ã€‚ç¬¬ä¸€æ¬¡è°ƒç”¨æ—¶ï¼Œç¡®å®šè®¡æ—¶èµ·ç‚¹
-	if (restart) t = double(clock());				// æ ¹æ®å®å‚å†³å®šæ˜¯å¦é‡æ–°ç¡®å®šè®¡æ—¶èµ·ç‚¹
-	return c * (double(clock()) - t);					// ä»ä¸Šä¸€è®¡æ—¶ç‚¹åˆ°ç°åœ¨æ‰€ç»å†çš„æ—¶é—´
+	static double t = double(clock());				// ¾²Ì¬¾Ö²¿±äÁ¿¡£µÚÒ»´Îµ÷ÓÃÊ±£¬È·¶¨¼ÆÊ±Æğµã
+	if (restart) t = double(clock());				// ¸ù¾İÊµ²Î¾ö¶¨ÊÇ·ñÖØĞÂÈ·¶¨¼ÆÊ±Æğµã
+	return c * (double(clock()) - t);					// ´ÓÉÏÒ»¼ÆÊ±µãµ½ÏÖÔÚËù¾­ÀúµÄÊ±¼ä
 }
-

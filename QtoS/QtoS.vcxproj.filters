@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="QtoS.cpp">
+    <ClCompile Include="Test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,6 +27,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="QStack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_Analysis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stop_watch.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

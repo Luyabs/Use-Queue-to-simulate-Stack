@@ -110,8 +110,8 @@ void Build_Data(int choice)
 		break;
 	case 4:
 		// 2^n数据测试	目的:按照log数级别测量数据 
-		Process2(stackfile, datafile4, 2, 2, 8, 262144*4, 0);
-		Process2(stackfile, datafile4, 3, 2, 8, 262144*4, 0);
+		Process2(stackfile, datafile4, 2, 2, 8, 65536*2, 0);
+		Process2(stackfile, datafile4, 3, 2, 8, 65536*2, 0);
 		break;
 
 	default:
