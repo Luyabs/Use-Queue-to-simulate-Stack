@@ -57,7 +57,7 @@ def drawpic1():
     plt.plot(x_set, y_set[2], linewidth = 3, label="merge_neo")
     plt.title(r'Push Compare', fontsize=22)
     plt.xlabel('data size', fontsize=22)                      #坐标
-    plt.ylabel('time/datasize /s', fontsize=22)
+    plt.ylabel('time /s', fontsize=22)
     plt.grid()                              #网格
     plt.legend(loc='best', fontsize=16)
     plt.savefig("Push Compare2.jpg")
@@ -130,7 +130,7 @@ def drawpic1_revise():
     plt.plot(x_set, y_set[1], linewidth = 3, label="merge")
     plt.title(r'Push Compare', fontsize=22)
     plt.xlabel('data size', fontsize=22)                      #坐标
-    plt.ylabel('time/datasize /s', fontsize=22)
+    plt.ylabel('time /s', fontsize=22)
     plt.grid()                              #网格
     plt.legend(loc='best', fontsize=16)
     #plt.savefig("Push Compare3.jpg")
@@ -343,7 +343,7 @@ def drawpic4():
     plt.scatter(x_set, ydivx_set[0], s = 30, marker='p', label="merge")
     plt.title(r'Merge Compare Processed', fontsize=22)
     plt.xlabel('data size', fontsize=22)                      #坐标
-    plt.ylabel('time/s', fontsize=22)
+    plt.ylabel('time/datasize /s', fontsize=22)
     plt.grid()                              #网格
     plt.legend(loc='best', fontsize=16)
     plt.savefig("Merge Compare Processed3.jpg")
