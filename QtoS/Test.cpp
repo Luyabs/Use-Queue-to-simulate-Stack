@@ -12,7 +12,7 @@ int main()
 	//Build_Data(1);
 	//Build_Data(2);
 	//Build_Data(3);
-	Build_Data(4);
+	//Build_Data(4);    //生成新数据，就把斜杠去了
 	OpenMenu();
 	return 0;
 	double e = 0;
